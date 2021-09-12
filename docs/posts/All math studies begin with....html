@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>My Hakyll Blog - All math studies begin with...</title>
+        <link rel="stylesheet" type="text/css" href="../css/default.css" />
+        <link rel="stylesheet" href="../css/syntax.css" />
+    </head>
+    <body>
+        <div id="header">
+            <div id="logo">
+                <a href="../">My Hakyll Blog</a>
+            </div>
+            <div id="navigation">
+                <a href="../">Home</a>
+                <a href="../about.html">About</a>
+                <a href="../contact.html">Contact</a>
+                <a href="../archive.html">Archive</a>
+            </div>
+        </div>
+
+        <div id="content">
+            <h1>All math studies begin with...</h1>
+
+            <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<div class="info">
+    Posted on September 11, 2021
+    
+</div>
+
+<p>Most programming languages tutorials begin on the lines of a program like :</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>main <span class="ot">=</span> <span class="fu">putStrLn</span> <span class="st">&quot;Hellow world!&quot;</span></span></code></pre></div>
+<p>Since we already understand math, we could begin without that sort of thing, of course we finally would come to that, but right now, we could (and we would!) discuss Haskell in another view, the <strong>I’m already a mathematician that don’t work with category theory</strong>.</p>
+<h2 id="in-the-beginning-there-were-nothing-or-not">In the beginning there were nothing… or not?</h2>
+<p>Just as we begin in maths with some <em>basic things</em> to build the currently studied theory, we need some <em>ground</em> to begin. If we go too deep, this <em>base</em> could be just as in math, logic. Of course going that deep would be time consuming, so, instead we would do as in math and claim</p>
+<pre><code>We have the power of make propositions over things, then we could add axioms to work</code></pre>
+<p>and then make some fixes to our logic in the way to learn haskell.</p>
+<p>Once we have some <strong>primitive logic</strong> (in fact a <strong>meta language</strong>), we need objects to work. In math we start over the lines of :</p>
+<pre><code>The sets exists</code></pre>
+<p>Or eventually equivalent in <strong>ZF</strong> theory :</p>
+<pre><code>The empty set exists</code></pre>
+<p>For us this kind of <strong>axiom</strong> (and just in our informal presentation), is :</p>
+<pre><code>Types exist and there could or not exist elements of a given type.</code></pre>
+<p>So, for our Haskell study, types are like sets are for math. That is a long way to advice you to don’t ask (right now) What’s a type? And just follow the flow.</p>
+<p>In fact types could have set representation and probably we would only work with types that could be made sets, but in general they can’t be sets<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> , at least not in a too expressive logic.</p>
+<p>At the same time we introduce sets, we usually add notation to refer to sets, over the same lines</p>
+<h2 id="notation-is-syntax-here-more-or-less">Notation is syntax here, more or less…</h2>
+<p>In Haskell the way to claim <strong>Some</strong> is a <em>type</em> that has an inhabitant <strong>Some1</strong> (an element of, in set terms), is:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">Some</span> <span class="ot">=</span> <span class="dt">Some1</span></span></code></pre></div>
+<p>Haskell only allow us to make types that begin with upper letters, we would look at the reason behind this in the future.</p>
+<p>The <strong>Some1</strong> is called a <em>constructor</em> for the type <strong>Some</strong>.</p>
+<p>More definitions:</p>
+<p>Let <strong>T</strong> be a <strong>Type</strong>, then for a given <strong>x</strong> we could say</p>
+<pre><code>x is of type T</code></pre>
+<p>and for that we write :</p>
+<pre><code>x:T</code></pre>
+<p>So things can have a type, nice.</p>
+<p>The ugly thing here is that Haskell uses the syntax</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="dt">Some1</span><span class="ot">::</span><span class="dt">Some</span></span></code></pre></div>
+<p>to say <strong>Some1</strong> has type <strong>Some</strong>.</p>
+<p>That’s since Haskell uses <strong>:</strong> alone to another thing. This means that we would use <strong>x:T</strong> whenever we aren’t talking of Haskell code, and we use <strong>x::T</strong> in Haskell code.</p>
+<p>Another thing to note in this example is that <strong>Some1</strong> has two meanings in</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">Some</span> <span class="ot">=</span> <span class="dt">Some1</span></span></code></pre></div>
+<p>One of them is :</p>
+<pre><code>Some1 is an element of type Some</code></pre>
+<p>The other one is :</p>
+<pre><code>Some1 is a constructor for the Some type that takes no argument.</code></pre>
+<p>In math terms:</p>
+<pre><code>We abuse the notation to write Some1 to both thing, a constant function without arguments and an element of Some.</code></pre>
+<p>This distinction will become important in the future.</p>
+<p>Now the math tradition of set theory would continue with ways to make sets from already defined sets.</p>
+<p>This is a bit tricky since we have two fundamental ways to make a set, we could make a subset of an already defined set or we could use two or more sets in one in some way. The problem with this approach is the part with subsets. We regularly won’t work with subtypes in the way we do in set theory since defining what a <strong>Subtype</strong> of a <strong>Type</strong> is, is hard or impossible depending on the context.</p>
+<h1 id="constructors">Constructors</h1>
+<p>That say, we could compose <strong>Types</strong> to make new types in a nice way :</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span>  <span class="dt">TwoSomes</span> <span class="ot">=</span> <span class="dt">GivemeTwoSomes</span> <span class="dt">Some</span> <span class="dt">Some</span> </span></code></pre></div>
+<p>This read as :</p>
+<pre><code>TwoSomes is a type that could be made from two things of type Some by using the constructor (function) GivemeTwoSomes.</code></pre>
+<p>So, we claim <strong>GivemeTwoSomes</strong> is a function, what’s it’s domain and image?</p>
+<p>In math terms :</p>
+<p><span class="math inline">\(GivemeTwoSomes: Some \times Some \rightarrow TwoSomes\)</span></p>
+<p>So, you give to <strong>GivemeTwoSomes</strong> two elements of <em>type</em> <strong>Some</strong> and <strong>GivemeTwoSomes</strong> would return you an element of type <strong>TwoSomes</strong>. That’s a good reason to refer to <strong>GivemeTwoSomes</strong> as a constructor for <strong>TwoSomes</strong>, especially since we don’t know right now other way to make an element of type <strong>TwoSomes</strong>.</p>
+<p>Let’s examine <strong>GivemeTwoSomes</strong> type in Haskell :</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="dt">GivemeTwoSomes</span><span class="ot">::</span> <span class="dt">Some</span> <span class="ot">-&gt;</span> (<span class="dt">Some</span> <span class="ot">-&gt;</span> <span class="dt">TwoSomes</span>)</span></code></pre></div>
+<p>Is almost the same!</p>
+<p>We could come close to this in math by using</p>
+<p><span class="math inline">\(TwoSomes^{Some \times Some } \cong (TwoSomes^{Some})^{Some}\)</span></p>
+<p>The functions from <span class="math inline">\(Some \times Some\)</span> to <span class="math inline">\(TwoSomes\)</span> are isomorphic to functions from <span class="math inline">\(Some\)</span> to functions from <span class="math inline">\(Some\)</span> to <span class="math inline">\(TwoSomes\)</span>.</p>
+<p>So, Haskell uses the later way to treat functions, usually referring to this as <a href="https://en.wikipedia.org/wiki/Currying">currying</a>. This means that we only have functions of one element in Haskell, but those functions can return another functions. Of course in practice we can’t just use functions of one element, so Haskell syntax allow us to write both:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="dt">GivemeTwoSomes</span><span class="ot">::</span> <span class="dt">Some</span> <span class="ot">-&gt;</span> <span class="dt">Some</span> <span class="ot">-&gt;</span> <span class="dt">TwoSomes</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="dt">GivemeTwoSomes</span><span class="ot">::</span> <span class="dt">Some</span> <span class="ot">-&gt;</span> (<span class="dt">Some</span> <span class="ot">-&gt;</span> <span class="dt">TwoSomes</span>)</span></code></pre></div>
+<p>with the same meaning.</p>
+<p>In the general case :</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="dt">T</span><span class="ot"> ::</span> a <span class="ot">-&gt;</span> b <span class="ot">-&gt;</span> (c <span class="ot">-&gt;</span> d) <span class="ot">-&gt;</span> f <span class="ot">-&gt;</span> g </span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="dt">T</span><span class="ot"> ::</span> a <span class="ot">-&gt;</span>(b <span class="ot">-&gt;</span>((c <span class="ot">-&gt;</span> d) <span class="ot">-&gt;</span>( f <span class="ot">-&gt;</span> g)))</span></code></pre></div>
+<p>Usually this is expressed by saying :</p>
+<pre><code>The (-&gt;) associates to the right </code></pre>
+<p>In just the same way we could have a non associative operation <strong>+</strong> and we choose to drop parens in</p>
+<p><span class="math inline">\(a+(b+(c+d)+(f+g))\)</span></p>
+<p>As</p>
+<p><span class="math inline">\(a+b+(c+d)+f+g\)</span></p>
+<p>In fact <strong>-&gt;</strong> is a sort of operator between <strong>Types</strong>, but more on that other day.</p>
+<p>There is still other two things to mention on <strong>Constructors</strong></p>
+<h2 id="types-with-more-constructors.">Types with more constructors.</h2>
+<p>Since we are making new types by defining a function that takes other types and get us our newtype, nothing stop us to use more than one function.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">SomeSomes</span> <span class="ot">=</span>  <span class="dt">GiveMeFourSomes</span> <span class="dt">Some</span> <span class="dt">Some</span> <span class="dt">Some</span> <span class="dt">Some</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>              <span class="op">|</span> <span class="dt">GiveMeFiveSomes</span> <span class="dt">Some</span> <span class="dt">Some</span> <span class="dt">Some</span> <span class="dt">Some</span> <span class="dt">Some</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>              <span class="op">|</span> <span class="dt">GiveMeSevenSomes</span> <span class="dt">Some</span> <span class="dt">Some</span> <span class="dt">Some</span> <span class="dt">Some</span> <span class="dt">Some</span> <span class="dt">Some</span> <span class="dt">Some</span></span></code></pre></div>
+<p>Here the <strong>|</strong> is used to separate the different constructors, ins fact we could write :</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">SomeSomes</span> <span class="ot">=</span>  <span class="dt">GiveMeFourSomes</span> <span class="dt">Some</span> <span class="dt">Some</span> <span class="dt">Some</span> <span class="dt">Some</span> <span class="op">|</span> <span class="dt">GiveMeFiveSomes</span> <span class="dt">Some</span> <span class="dt">Some</span> <span class="dt">Some</span> <span class="dt">Some</span> <span class="dt">Some</span> <span class="op">|</span> <span class="dt">GiveMeSevenSomes</span> <span class="dt">Some</span> <span class="dt">Some</span> <span class="dt">Some</span> <span class="dt">Some</span> <span class="dt">Some</span> <span class="dt">Some</span> <span class="dt">Some</span></span></code></pre></div>
+<p>Or more aesthetics</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">SomeSomes</span> <span class="ot">=</span>  </span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>       <span class="dt">GiveMeFourSomes</span> <span class="dt">Some</span> <span class="dt">Some</span> <span class="dt">Some</span> <span class="dt">Some</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>       <span class="op">|</span> <span class="dt">GiveMeFiveSomes</span> <span class="dt">Some</span> <span class="dt">Some</span> <span class="dt">Some</span> <span class="dt">Some</span> <span class="dt">Some</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>       <span class="op">|</span> <span class="dt">GiveMeSevenSomes</span> <span class="dt">Some</span> <span class="dt">Some</span> <span class="dt">Some</span> <span class="dt">Some</span> <span class="dt">Some</span> <span class="dt">Some</span> <span class="dt">Some</span></span></code></pre></div>
+<p>The only requirement here is to put all the constructors for <strong>SomeSomes</strong> more at the right than the first column. This allows us to write</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">SomeSomes</span> <span class="ot">=</span>  </span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>       <span class="dt">GiveMeFourSomes</span> <span class="dt">Some</span> <span class="dt">Some</span> <span class="dt">Some</span> <span class="dt">Some</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>             <span class="op">|</span> <span class="dt">GiveMeFiveSomes</span> <span class="dt">Some</span> <span class="dt">Some</span> <span class="dt">Some</span> <span class="dt">Some</span> <span class="dt">Some</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">|</span> <span class="dt">GiveMeSevenSomes</span> <span class="dt">Some</span> <span class="dt">Some</span> <span class="dt">Some</span> <span class="dt">Some</span> <span class="dt">Some</span> <span class="dt">Some</span> <span class="dt">Some</span></span></code></pre></div>
+<p>But please, for Hilbert sake, don’t do that!</p>
+<p>As you saw, the real restriction here, is how much tired we could become of write <strong>Some</strong> in the right side of the constructor, or to add more constructors.</p>
+<h2 id="types-with-more-than-one-type">Types with more than one type</h2>
+<p>Of course, we aren’t limited to write only <strong>Some</strong> type, so :</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">AnotherType</span> <span class="ot">=</span> <span class="dt">AnotherConstructor</span> </span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">AnotherType2</span> <span class="ot">=</span> </span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>      <span class="dt">AnotherConstructor2</span> </span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>      <span class="op">|</span> <span class="dt">AnotherConstructor2_sub</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">AComposeType</span> <span class="ot">=</span> <span class="dt">Compose</span> <span class="dt">AnotherType</span> <span class="dt">AnotherType2</span></span></code></pre></div>
+<p>Here we need to talk about the relation between <strong>constructors</strong> of the same <strong>type</strong>.</p>
+<p>Both constructors <strong>AnotherConstructor2</strong> and <strong>AnotherConstructor2_sub</strong> means separated constants (constants functions), for <strong>AnotherType</strong>. This means that in general, different constructors of the same type can’t produce the same element! So even if both constructors takes the same type of arguments, and we use the same things for every type, the constructed element is always different.</p>
+<p>Another example :</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">R</span> <span class="ot">=</span> <span class="dt">R1</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">L</span> <span class="ot">=</span> </span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>      <span class="dt">L1</span> <span class="dt">R</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>      <span class="op">|</span> <span class="dt">L2</span> <span class="dt">R</span> </span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>      <span class="op">|</span> <span class="dt">L3</span> <span class="dt">R</span></span></code></pre></div>
+<p>In math terms we could write it like:</p>
+<p><span class="math inline">\(L := \{('L1',r),('L2',r),('L3',r) | r \in R\)</span></p>
+<p>Or more generally, we talk about <a href="https://en.wikipedia.org/wiki/Disjoint_union">disjoint union</a>, but here is called <a href="https://en.wikipedia.org/wiki/Tagged_union">sum types</a>, although in other programming languages this can be found as <a href="https://en.wikipedia.org/wiki/Tagged_union">tagged union</a>.</p>
+<p>So we could write <strong>L</strong> in a way like</p>
+<p><span class="math inline">\(L := R+R+R\)</span></p>
+<p>Where <strong>+</strong> denotes sum of the types.</p>
+<p>This assumption from Haskell allows us to ask for every <strong>x:T</strong>, What constructor for <strong>T</strong> was used in the creation of <strong>x</strong>?</p>
+<p>That question would lead us to the :</p>
+<h2 id="case-expression-and-first-functions">Case expression and first functions</h2>
+<p>So, until now we only have defined types, but we haven’t write a function that don’t define a type, is time to fix it.</p>
+<p>First some types</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">CaseType</span> <span class="ot">=</span> </span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>        <span class="dt">First</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>      <span class="op">|</span> <span class="dt">Second</span> </span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">ReturnType</span> <span class="ot">=</span> <span class="dt">Return</span> <span class="dt">CaseType</span></span></code></pre></div>
+<p>Our task would be to write a function that take a <strong>CaseType</strong> an if it was made from <strong>First</strong> return <strong>Return(Second)</strong> otherwise return <strong>Return(First)</strong>. In math :</p>
+<p><span class="math inline">\(f : CaseType \rightarrow ReturnType\)</span></p>
+<p><span class="math inline">\(f(First) = Return(Second)\)</span></p>
+<p><span class="math inline">\(f(Second) = Return(First)\)</span></p>
+<p>An here comes (a ugly form for this simple case) a way to implement it in Haskell</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="ot">f ::</span> <span class="dt">CaseType</span> <span class="ot">-&gt;</span> <span class="dt">ReturnType</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>f x <span class="ot">=</span> <span class="kw">case</span> x <span class="kw">of</span> </span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>        <span class="dt">First</span> <span class="ot">-&gt;</span> <span class="dt">Return</span> <span class="dt">Second</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>        <span class="dt">Second</span> <span class="ot">-&gt;</span> <span class="dt">Return</span> <span class="dt">First</span></span></code></pre></div>
+<p>There’s a lot to talk here.</p>
+<ul>
+<li><p>The type for <strong>f</strong>, <strong>f:: Case…</strong> is almost optional. Haskell has something called <a href="https://en.wikipedia.org/wiki/Type_inference">type inference</a> that allow us most of the time to omit the type for <strong>f</strong>. As code become complex, <strong>type inference</strong> becomes undecidable. That means that we can’t have a general way to compute always a right type for things, so, some times Haskell would ask us to put the <strong>type</strong> by hand. As a mathematician I think you really know the power of reasoning about how to define and use functions by having functions domain and range, so is quite superfluous to warn you to always or almost always put the types for this kind of functions.</p></li>
+<li><p>Then comes the <strong>f x = … </strong>. As we said before, in Haskell we have functions of only one argument, so we can drop the parens <strong>(</strong> and <strong>)</strong> in functions and just write <strong>f x</strong> instead of <strong>f(x)</strong>. More on this latter.</p></li>
+<li><p>Now the <strong>case expression</strong>. <strong>case</strong> is a way Haskell bring us the right to ask how things were made. So instead of the <strong>x</strong> we could put any <strong>expression</strong> and Haskell would allow us to disintegrate the <strong>expression</strong> in parts. The way to tell Haskell <em>I only want things made this way</em>, is by putting something called <strong>pattern match</strong> at the begin of the following lines. In our case, the <strong>pattern match</strong> is just the name of our constructor. This way we tell Haskell <em>If x was made from the First constructor, then use Return constructor an Second constructor to return an element of type Return</em>. The second line is the same but for <strong>Second</strong>, <strong>Return</strong>, <strong>First</strong>.</p></li>
+</ul>
+<p>Something beautiful is that we could write :</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>f <span class="dt">First</span> <span class="ot">=</span> <span class="dt">Return</span> <span class="dt">Sencond</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>f <span class="dt">Second</span> <span class="ot">=</span> <span class="dt">Return</span> <span class="dt">First</span></span></code></pre></div>
+<p>So, Haskell syntax allows us to make the <strong>case/pattern match</strong> at the left side of the <strong>=</strong>. This is almost the same as the mathematical way to write the function.</p>
+<p>What happens to this if we have bigger cases?</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">Color</span> <span class="ot">=</span> <span class="dt">Red</span> <span class="op">|</span> <span class="dt">Blue</span><span class="op">|</span> <span class="dt">Yellow</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">ColorPairs</span> <span class="ot">=</span> <span class="dt">Pairs</span> <span class="dt">Color</span> <span class="dt">Color</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">EqualColors</span> <span class="ot">=</span> <span class="dt">Yes</span> <span class="op">|</span> <span class="dt">No</span> </span></code></pre></div>
+<p>We would define a function <strong>compare</strong> that takes a pair and returns a ** Yes** if both colors are equal, otherwise <strong>No</strong>.</p>
+<p>In math :</p>
+<p><span class="math inline">\(compare((x,y))= Yes if x = y\)</span> <span class="math inline">\(compare((x,y))= No if x \neq y\)</span></p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">compare</span> (<span class="dt">Pairs</span> x y) <span class="ot">=</span> </span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">case</span> y <span class="kw">of</span> </span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Red</span> <span class="ot">-&gt;</span> <span class="kw">case</span> x <span class="kw">of</span> </span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>            <span class="dt">Red</span> <span class="ot">-&gt;</span> <span class="dt">Yes</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>            <span class="dt">Blue</span><span class="ot">-&gt;</span> <span class="dt">No</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>            <span class="dt">Yellow</span><span class="ot">-&gt;</span> <span class="dt">No</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Blue</span> <span class="ot">-&gt;</span> <span class="kw">case</span> x <span class="kw">of</span> </span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>              <span class="dt">Blue</span> <span class="ot">-&gt;</span> <span class="dt">Yes</span>  </span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>              _ <span class="ot">-&gt;</span> <span class="dt">No</span></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Yellow</span> <span class="ot">-&gt;</span> </span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>      <span class="kw">case</span> x <span class="kw">of</span> </span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>        <span class="dt">Yellow</span> <span class="ot">-&gt;</span> <span class="dt">Yes</span></span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>        _ <span class="ot">-&gt;</span> <span class="dt">No</span></span></code></pre></div>
+<p>This is quite large, but follows some rules.</p>
+<ul>
+<li>The cases are more at the right than the <strong>case</strong> declaration.</li>
+<li>Right side of a case can start in the line or the next line but it needs to be more at right than the case.</li>
+<li><strong>_</strong> stands for <strong>any case that hasn’t been taken account</strong></li>
+</ul>
+<p><strong>(Pairs x y)</strong>, the parents are needed since, if you remember</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="dt">Pairs</span><span class="ot"> ::</span> <span class="dt">Color</span> <span class="ot">-&gt;</span> <span class="dt">Color</span> <span class="ot">-&gt;</span> <span class="dt">ColorPairs</span> </span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="dt">Pairs</span><span class="ot"> ::</span> <span class="dt">Color</span> <span class="ot">-&gt;</span> (<span class="dt">Color</span> <span class="ot">-&gt;</span> <span class="dt">ColorPairs</span>)</span></code></pre></div>
+<p>And we have</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">compare</span><span class="ot"> ::</span> <span class="dt">ColorPairs</span> <span class="ot">-&gt;</span> <span class="dt">EqualColors</span></span></code></pre></div>
+<p>So, adding parents to the next expression</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">compare</span> <span class="dt">Pairs</span> x y</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>((<span class="fu">compare</span> <span class="dt">Pairs</span>) x) y</span></code></pre></div>
+<p>While we want</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">compare</span> ((<span class="dt">Pairs</span> x) y)</span></code></pre></div>
+<p>Why the parents goes to the left?</p>
+<p>If you think of it, is just because <strong>(-&gt;)</strong> goes to the right. By using this convention we could omit parents in things like:</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="ot">f ::</span> a <span class="ot">-&gt;</span> b <span class="ot">-&gt;</span> c <span class="ot">-&gt;</span> d</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>f<span class="ot"> a1 ::</span> b <span class="ot">-&gt;</span> c <span class="ot">-&gt;</span> d</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>f a1<span class="ot"> b1 ::</span> c <span class="ot">-&gt;</span> d</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>f a1 b1<span class="ot"> c1 ::</span>  d</span></code></pre></div>
+<p>Now simplifying as before, and calling the function <strong>compare2</strong>:</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>compare2 (<span class="dt">Pairs</span> <span class="dt">Red</span> <span class="dt">Red</span>) <span class="ot">=</span> <span class="dt">Yes</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>compare2 (<span class="dt">Pairs</span> <span class="dt">Yellow</span> <span class="dt">Yellow</span>) <span class="ot">=</span> <span class="dt">Yes</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>compare2 (<span class="dt">Pairs</span> <span class="dt">Blue</span> <span class="dt">Blue</span>) <span class="ot">=</span> <span class="dt">Yes</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>compare2 (<span class="dt">Pairs</span> _ _ ) <span class="ot">=</span> <span class="dt">No</span></span></code></pre></div>
+<p>What a bout a function that takes two <strong>Colors</strong> and return <strong>EqualColors</strong> the same way as <strong>compare</strong> and <strong>compare2</strong>?</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>compareColors <span class="dt">Red</span> <span class="dt">Red</span> <span class="ot">=</span> <span class="dt">Yes</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>compareColors <span class="dt">Yellow</span> <span class="dt">Yellow</span> <span class="ot">=</span> <span class="dt">Yes</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>compareColors  <span class="dt">Blue</span> <span class="dt">Blue</span> <span class="ot">=</span> <span class="dt">Yes</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>compareColors  _ _  <span class="ot">=</span> <span class="dt">No</span></span></code></pre></div>
+<p>Or the one liner :</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>compareColors2 x y <span class="ot">=</span> compare2 (<span class="dt">Pairs</span> x y)</span></code></pre></div>
+<p>Did you remember that <strong>Pairs</strong> is a function right? What if i show you the composition operator <strong>.</strong>?</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>compareColors3 x y <span class="ot">=</span> (compare2 <span class="op">.</span> <span class="dt">Pairs</span> x) y </span></code></pre></div>
+<p>Here we are legitimate composing <strong>compare2</strong> and ** Pairs x** since:</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="ot">x::</span><span class="dt">Color</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="dt">Pairs</span><span class="ot">::</span> <span class="dt">Color</span> <span class="ot">-&gt;</span> (<span class="dt">Color</span>  <span class="op">-</span> <span class="op">&gt;</span> <span class="dt">ColorPairs</span>)</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="dt">Pairs</span><span class="ot"> x::</span> <span class="dt">Color</span>  <span class="op">-</span> <span class="op">&gt;</span> <span class="dt">ColorPairs</span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="ot">compare2 ::</span> <span class="dt">ColorPairs</span> <span class="ot">-&gt;</span> <span class="dt">EqualColors</span></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>compare2 <span class="op">.</span> (<span class="dt">Pairs</span> x)<span class="ot"> ::</span> <span class="dt">Color</span> <span class="ot">-&gt;</span> <span class="dt">EqualColors</span></span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>compare2 <span class="op">.</span> <span class="dt">Pairs</span><span class="ot"> x ::</span> <span class="dt">Color</span> <span class="ot">-&gt;</span> <span class="dt">EqualColors</span></span></code></pre></div>
+<p>We could omit the <strong>()</strong> since we have <strong>.</strong> here, more on that other day.</p>
+<p>A thing to note is that <strong>.</strong> has an space before and after of the functions it is composing, these spaces could or couldn’t be needed, it depends on the contexts since <strong>f.h</strong> could have other meanings in Haskell. To avoid problems, we always write <strong>f . h</strong> with the space for composition. In fact, this is one of the things that I could say are <em>ugly</em> of Haskell, and probably most mathematicians can understand this (or not, you are free).</p>
+<p>So, what about another short version of this <strong>compareColors</strong>?</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>compareColors4 x <span class="ot">=</span> compare2 <span class="op">.</span> <span class="dt">Pairs</span> x  </span></code></pre></div>
+<p>This time we omit second argument for <strong>compareColors4</strong> since Haskell can make the previous check of types for <strong>compare2 . Pairs x</strong> and <strong>compareColors4</strong> always has been a function from <strong>Color</strong> to a function that takes a color an returns a <strong>EqualColors</strong> .</p>
+<h2 id="recursive-types">Recursive types</h2>
+<p>We are almost there, we have a way to make types, a way to know how types where made and a way to write functions about them. If you think on it, we are at a point like ZF where we can make sets from other sets, but we still lack the infinity axiom. We don’t have the same structures (union, intersection, cartesian product), but we have a set of tools that allows us to talk about types, functions, functions composition, types composition.</p>
+<p>As with ZF, we would be motivated to have infinite elements to build at least the <span class="math inline">\(\mathbb{N}\)</span> (naturals).</p>
+<p>If you remember, one could proceed by Peano’s axioms or by inductive sets. Let’s use Peano’s way.</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">Nat</span> <span class="ot">=</span> </span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>        <span class="dt">Z</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>      <span class="op">|</span> <span class="dt">S</span> <span class="dt">Nat</span></span></code></pre></div>
+<p>Let’s read this as functions and types again</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="dt">Nat</span><span class="ot">::</span><span class="dt">Type</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="dt">Z</span><span class="ot">::</span> <span class="dt">Nat</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="dt">S</span><span class="ot">::</span> <span class="dt">Nat</span> <span class="ot">-&gt;</span> <span class="dt">Nat</span></span></code></pre></div>
+<p>So, we’re claiming :</p>
+<p><span class="math inline">\(\exists Nat\)</span> <span class="math inline">\(\exists Z:Nat\)</span> $S:Nat-&gt;Nat $</p>
+<p>And by the nature of Haskell we know that if <span class="math inline">\(n:Nat\)</span> then <span class="math inline">\((S n):Nat\)</span> and <span class="math inline">\(\forall n:Nat,\,\, n \neq S n\)</span> and <span class="math inline">\(\forall n:Nat, \,\, S n \neq Z\)</span>. In fact we are only lacking the <em>There is and equality over Nat</em> to get a thing that follows the Peano’s axioms if we ignore the fact that computer can’t store and infinite collection of numbers, but just as us, can encode the expression of something infinite in a finite mean.</p>
+<p>This definition is special since <span class="math inline">\(Nat\)</span> is being defined by appealing to <span class="math inline">\(Nat\)</span>. Doing this kind of things is called <a href="https://en.wikipedia.org/wiki/Impredicativity">impredicativity</a> . We usually forbid impredicativity in set theory since it allow us to introduce the <a href="https://en.wikipedia.org/wiki/Russell%27s_paradox">Russell’s paradox</a> . By incredible at that could be, there are consistent type theories that are impredicative. We won’t discuss that here since the aim of Haskell isn’t to be a consistent system, that could be a surprise, but in fact Haskell with all it’s things, is inconsistent. That only means the following for us :</p>
+<pre><code>We could use a subset of Haskell that guaranties to us it's consistency, but from time to time and in a controled way, we would use the non consistent part in the pursue to write a program.</code></pre>
+<p>TODO: Seguir hablando de recursividad e introducir lazy haskell</p>
+<section class="footnotes" role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1" role="doc-endnote"><p>see things related to <a href="https://en.wikipedia.org/wiki/Scott_continuity">scott continuity</a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+        </div>
+        <div id="footer">
+            Site proudly generated by
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+        </div>
+    </body>
+</html>

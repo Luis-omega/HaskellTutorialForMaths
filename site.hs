@@ -2,11 +2,21 @@
 {-# LANGUAGE OverloadedStrings #-}
 import           Data.Monoid (mappend)
 import           Hakyll
+import qualified Text.Pandoc.Options as T
+import qualified Data.Text as Te
+import Text.Pandoc.Highlighting(pygments, espresso, styleToCss)
+import Text.Pandoc.Definition
+import Text.Pandoc.Walk
+import Text.Pandoc.Extensions
+import Data.Maybe
+import Debug.Trace
 
+import ParserH
 
 config :: Configuration
 config = defaultConfiguration
   { destinationDirectory = "docs"
+    ,previewHost = "0.0.0.0"
   }
 
 
@@ -23,21 +33,26 @@ main = hakyllWith config $ do
 
     match (fromList ["about.rst", "contact.markdown"]) $ do
         route   $ setExtension "html"
-        compile $ pandocCompiler
+        compile $ pandocCompilerWith defaultHakyllReaderOptions pandocWriteOptions 
             >>= loadAndApplyTemplate "templates/default.html" defaultContext
             >>= relativizeUrls
 
     match "posts/*" $ do
         route $ setExtension "html"
-        compile $ pandocCompiler
-            >>= loadAndApplyTemplate "templates/post.html"    postCtx
-            >>= loadAndApplyTemplate "templates/default.html" postCtx
-            >>= relativizeUrls
+        compile $ getResourceBody 
+          >>=  renderPandocWith pandocReaderOptions pandocWriteOptions . fmap parseLiterated 
+          >>= loadAndApplyTemplate "templates/post.html"    postCtx 
+          >>= loadAndApplyTemplate "templates/default.html" postCtx
+          >>= relativizeUrls 
+
+   -- match "posts/*" $ version "haskell" $ do 
+   --   route $ setExtension "lhs"
+   --   compile getResourceBody
 
     create ["archive.html"] $ do
         route idRoute
         compile $ do
-            posts <- recentFirst =<< loadAll "posts/*"
+            posts <- recentFirst =<< loadAll regularPost
             let archiveCtx =
                     listField "posts" postCtx (return posts) `mappend`
                     constField "title" "Archives"            `mappend`
@@ -52,7 +67,7 @@ main = hakyllWith config $ do
     match "index.html" $ do
         route idRoute
         compile $ do
-            posts <- recentFirst =<< loadAll "posts/*"
+            posts <- recentFirst =<< loadAll regularPost
             let indexCtx =
                     listField "posts" postCtx (return posts) `mappend`
                     constField "title" "Home"                `mappend`
@@ -65,10 +80,50 @@ main = hakyllWith config $ do
 
     match "templates/*" $ compile templateCompiler
 
+    create ["css/syntax.css"] $ do
+      route idRoute
+      compile $ do
+        makeItem $ styleToCss pandocCodeStyle
+
 
 --------------------------------------------------------------------------------
 postCtx :: Context String
 postCtx =
     dateField "date" "%B %e, %Y" `mappend`
     defaultContext
+
+regularPost = "posts/*" .&&. hasNoVersion
+haskellPost = "posts/*" .&&. hasVersion "haskell"
+
+pandocCodeStyle = espresso
+
+pandocWriteOptions :: T.WriterOptions
+pandocWriteOptions = defaultHakyllWriterOptions {T.writerHighlightStyle=Just pandocCodeStyle,
+  T.writerHTMLMathMethod= T.MathJax "",
+  T.writerExtensions = extensions }
+  where
+    extensions = T.enableExtension Ext_literate_haskell $T.writerExtensions defaultHakyllWriterOptions
+
+
+pandocReaderOptions :: T.ReaderOptions
+pandocReaderOptions = defaultHakyllReaderOptions {T.readerExtensions= newExtensions2}
+  where
+  newExtensions = T.enableExtension Ext_literate_haskell $T.readerExtensions defaultHakyllReaderOptions
+  newExtensions2 = T.enableExtension Ext_tex_math_dollars newExtensions
+
+
+cleanCodeBlock :: Block -> Block
+cleanCodeBlock (CodeBlock attribs text) = 
+  let stripedSufix = fromMaybe text $ Te.stripSuffix "\\end{code}" text in
+  let striped = fromMaybe stripedSufix $ Te.stripPrefix "\\begin{code}" stripedSufix in
+    CodeBlock attribs striped
+cleanCodeBlock a = a
+
+pandocCodeBlockTransform ::Pandoc -> Compiler Pandoc
+pandocCodeBlockTransform p= return $ trace (show out) out
+  where 
+    out = (walk cleanCodeBlock (trace (show p) p))
+
+
+
 

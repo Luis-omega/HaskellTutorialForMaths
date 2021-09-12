@@ -1,0 +1,24 @@
+name:                HaskellTutorialForMaths
+version:             0.1.0.0
+-- synopsis:
+-- description:
+homepage:            https://github.com/Luis-omega/HaskellTutorialForMaths#readme
+license:             BSD3
+license-file:        LICENSE
+author:              Luis Alberto Díaz Díaz
+maintainer:          anon@anon.com
+copyright:           MIT
+category:            Web
+build-type:          Simple
+extra-source-files:  README.md
+cabal-version:       >=1.10
+
+executable HaskellTutorialForMaths
+  main-is:             site.hs
+  default-language:    Haskell2010
+  ghc-options:         -threaded
+  build-depends:       base >= 4.7 && < 5,
+                       hakyll,
+                       pandoc,
+                       pandoc-types,
+                       text
