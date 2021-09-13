@@ -6,22 +6,22 @@ a.sourceLine:empty { height: 1.2em; }
   margin-bottom: 0.8em;
   overflow: auto;
 }
-@media (min-width:800px) {
+@media (min-width:1024px) {
   .code, .sourceCode, .mathJaxCustom {
   margin-top: 0.3em; 
   margin-bottom: 0.3em;
   }
 }
-.sourceCode { overflow: visible; background:black; padding-left: 0.2em;}
+.sourceCode { overflow: visible; background:rgba(0,0,0,200); padding-left: 0.2em;}
 code.sourceCode {padding-left: 0;}
-@media (min-width:800px) {.sourceCode { overflow: visible; background:black; padding-left:0.1em;} code.sourceCode{padding-left: 0}}
+@media (min-width:1024px) {.sourceCode { overflow: visible; background:black; padding-left:0.1em;} code.sourceCode{padding-left: 0}}
 code.sourceCode { white-space: pre; position: relative; }
 code { word-wrap: break-word; white-space: normal; background:rgba(200,200,200,80); font-size:1.2em;}
-@media (min-width:800px) {code { font-size: 1em;}}
+@media (min-width:1024px) {code { font-size: 1em;}}
 div.sourceCode { margin: 1em 0;}
 @media screen {
-div.sourceCode { overflow: auto; background: black;color:white; font-size:1.2em;}
-@media (min-width:800px) {div.sourceCode { overflow: auto; background: black;color:white; font-size:1.6em;}}
+div.sourceCode { overflow: auto; background: rgba(0,0,0,200);color:white; font-size:1.2em;}
+@media (min-width:1024px) {div.sourceCode { overflow: auto; background: black;color:white; font-size:1.6em;}}
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
