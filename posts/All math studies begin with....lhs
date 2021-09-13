@@ -351,8 +351,9 @@ We would define a function **compare** that takes a pair and returns a ** Yes** 
 
 In math :
 
-  $compare((x,y))= Yes if x = y$
-  $compare((x,y))= No if x \neq y$
+$compare((x,y))= Yes \quad \text{if} \quad x = y$
+
+$compare((x,y))= No \quad \text{if} \quad x \neq y$n
   
 
 ~~~{.haskell}
