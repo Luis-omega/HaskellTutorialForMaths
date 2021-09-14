@@ -1,4 +1,4 @@
-body {
+#content {
     color: black;
     font-size: 1em;
     font-family : dejavu, firacode, ubuntu, monospace;
@@ -8,13 +8,13 @@ body {
 }
 
 @media (min-width:1024px) {
-  body {
+  #content {
     width: 50%;
   }
 }
 
 .math {
-  display: block;
+  display: inline-block;
   overflow-x:auto;
   max-width:100%;
 } 
@@ -31,6 +31,13 @@ div#logo a {
     font-size: 0.5em;
     font-weight: bold;
     text-decoration: none;
+}
+
+@media (min-width:1024px){
+  div#header {
+    width:50%;
+    margin: auto;
+  }
 }
 
 div#header #navigation {

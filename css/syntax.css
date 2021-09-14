@@ -15,9 +15,9 @@ a.sourceLine:empty { height: 1.2em; }
 .sourceCode { overflow: visible; background:rgba(0,0,0,200); padding-left: 0.2em;}
 code.sourceCode {padding-left: 0;}
 @media (min-width:1024px) {.sourceCode { overflow: visible; background:black; padding-left:0.1em;} code.sourceCode{padding-left: 0}}
-code.sourceCode { white-space: pre; position: relative; }
-code { word-wrap: break-word; white-space: normal; background:rgba(200,200,200,80); font-size:1.2em;}
-@media (min-width:1024px) {code { font-size: 1em;}}
+code.sourceCode { white-space: pre; position: relative; font-size:1em}
+code { word-wrap: break-word; white-space: normal; background:rgba(200,200,200,80); font-size:1.5em;}
+@media (min-width:1024px) {code { font-size: 1.5em;}}
 div.sourceCode { margin: 1em 0;}
 @media screen {
 div.sourceCode { overflow: auto; background: rgba(0,0,0,200);color:white; font-size:1.2em;}
@@ -56,17 +56,21 @@ code span.cn { color: #880000; } /* Constant */
 code span.co { color: #60a0b0; font-style: italic; } /* Comment */
 code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
 code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
+code span.dt { color: #e6e1bd; font-weight: bold; } /* DataType */
+/* code span.dt { color: #902000; } /* DataType */
 code span.dv { color: #40a070; } /* DecVal */
 code span.er { color: #ff0000; font-weight: bold; } /* Error */
 code span.ex { } /* Extension */
 code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
+code span.fu { color: #ffffff; } /* Function */
+/*code span.fu { color: #06287e; } /* Function */
 code span.im { } /* Import */
 code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
+code span.op { color: #666666; font-weight: bold; } /* Operator */
+/*code span.op { color: #666666; } /* Operator */
+code span.ot { color: #a980c6; font-weight: bold; } /* Other */
+/*code span.ot { color: #007020; }  Other */
 code span.pp { color: #bc7a00; } /* Preprocessor */
 code span.sc { color: #4070a0; } /* SpecialChar */
 code span.ss { color: #bb6688; } /* SpecialString */
