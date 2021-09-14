@@ -7,7 +7,9 @@ tags: Tutorial, TypeTheory, Maths
 Most programming languages tutorials begin on the lines of a program like :
 
 ~~~{.haskell}
-main = putStrLn "Hellow world!"
+\begin{code}
+  main = putStrLn "Hellow world!"
+\end{code}
 ~~~
   
 Since we already understand math, we could begin without that sort of thing, of course we
@@ -58,7 +60,9 @@ Notation is syntax here, more or less...
 In Haskell the way to claim **Some** is a *type* that has an inhabitant **Some1** (an element of, in set terms), is:
 
 ~~~{.haskell}
-data Some = Some1
+\begin{code}
+  data Some = Some1
+\end{code}
 ~~~
 
 Haskell only allow us to make types that begin with upper letters, we would look at the reason behind  this 
@@ -122,7 +126,9 @@ Constructors
 That say, we could compose **Types** to make new types in a nice way :
 
 ~~~{.haskell}
-data  TwoSomes = GivemeTwoSomes Some Some 
+\begin{code}
+  data  TwoSomes = GivemeTwoSomes Some Some 
+\end{code}
 ~~~
   
 This read as :
@@ -212,10 +218,12 @@ data SomeSomes =  GiveMeFourSomes Some Some Some Some | GiveMeFiveSomes Some Som
 Or more aesthetics
 
 ~~~{.haskell}
-data SomeSomes =  
+\begin{code}
+  data SomeSomes =  
        GiveMeFourSomes Some Some Some Some
        | GiveMeFiveSomes Some Some Some Some Some
        | GiveMeSevenSomes Some Some Some Some Some Some Some
+\end{code}
 ~~~
 
 
@@ -241,12 +249,15 @@ Of course, we aren't limited to write only **Some** type, so :
 
 
 ~~~{.haskell}
-data AnotherType = AnotherConstructor 
-data AnotherType2 = 
+\begin{code}
+  data AnotherType = AnotherConstructor 
+  data AnotherType2 = 
       AnotherConstructor2 
       | AnotherConstructor2_sub
-data AComposeType = Compose AnotherType AnotherType2
+  data AComposeType = Compose AnotherType AnotherType2
+\end{code}
 ~~~
+  
 
 Here we need to talk about the relation between **constructors** of the same **type**.
 
@@ -258,17 +269,19 @@ is always different.
 Another example :
 
 ~~~{.haskell}
-data R = R1
-data L = 
-      L1 R
-      | L2 R 
-      | L3 R
+\begin{code}
+  data R = R1
+  data L = 
+        L1 R
+        | L2 R 
+        | L3 R
+\end{code}
 ~~~
   
 
 In math terms we could write it like:
 
-  $L := \{('L1',r),('L2',r),('L3',r) | r \in R$
+  $L := \{('L1',r),('L2',r),('L3',r) | r \in R\}$
 
 Or more generally, we talk about [disjoint union](https://en.wikipedia.org/wiki/Disjoint_union), but here is called [sum types](https://en.wikipedia.org/wiki/Tagged_union), although in other programming languages this can be found as [tagged union](https://en.wikipedia.org/wiki/Tagged_union).
 
@@ -292,11 +305,13 @@ First some types
 
 
 ~~~{.haskell}
-data CaseType = 
-        First
-      | Second 
-
-data ReturnType = Return CaseType
+\begin{code}
+  data CaseType = 
+          First
+        | Second 
+  
+  data ReturnType = Return CaseType
+\end{code}
 ~~~
 
 Our task would be to write a function that take a **CaseType** an if it was made from **First** return **Return(Second)** otherwise return **Return(First)**. 
@@ -330,8 +345,10 @@ There's a lot to talk here.
 Something beautiful is that we could write :
 
 ~~~{.haskell}
-f First = Return Sencond
-f Second = Return First
+\begin{code}
+  f First = Return Second
+  f Second = Return First
+\end{code}
 ~~~
 
 So, Haskell syntax allows us to make the **case/pattern match** at the left side of the **=**. This is almost the same as the mathematical way to write the function.
@@ -347,13 +364,13 @@ What happens to this if we have bigger cases?
 \end{code}
 ~~~
 
-We would define a function **compare** that takes a pair and returns a ** Yes** if both colors are equal, otherwise **No**.
+We would define a function **compare** that takes a pair and returns a **Yes** if both colors are equal, otherwise **No**.
 
 In math :
 
 $compare((x,y))= Yes \quad \text{if} \quad x = y$
 
-$compare((x,y))= No \quad \text{if} \quad x \neq y$n
+$compare((x,y))= No \quad \text{if} \quad x \neq y$
   
 
 ~~~{.haskell}
@@ -382,7 +399,8 @@ This is quite large, but follows some rules.
 - Right side of a case can start in the line or the next line but it needs to be more at right than the case.
 - **\_** stands for **any case that hasn't been taken account**
 
-**(Pairs x y)**, the parents are needed since, if you remember
+
+In **(Pairs x y)**, the parents are needed since, if you remember
 
 ~~~{.haskell}
 Pairs :: Color -> Color -> ColorPairs 
@@ -453,7 +471,7 @@ Or the one liner :
 \end{code}
 ~~~
   
-Did you remember that **Pairs** is a function right? What if i show you the composition operator **.**?
+Did you remember that **Pairs** is a function right? What if i show you the composition operator "**.**"?
 
 
 ~~~{.haskell}
@@ -462,12 +480,12 @@ Did you remember that **Pairs** is a function right? What if i show you the comp
 \end{code}
 ~~~
 
-Here we are legitimate composing **compare2** and ** Pairs x** since:
+Here we are legitimate composing **compare2** and **Pairs x** since:
 
 ~~~{.haskell}
-x::Color
-Pairs:: Color -> (Color  - > ColorPairs)
-Pairs x:: Color  - > ColorPairs
+x ::Color
+Pairs :: Color -> (Color  -> ColorPairs)
+Pairs x :: Color  -> ColorPAirs
 compare2 :: ColorPairs -> EqualColors
 compare2 . (Pairs x) :: Color -> EqualColors
 compare2 . Pairs x :: Color -> EqualColors
@@ -475,7 +493,7 @@ compare2 . Pairs x :: Color -> EqualColors
  
 We could omit the **()** since we have **.**  here, more on that other day.
 
-A thing to note is that **.** has an space before and after of the functions it is composing, these spaces could or couldn't  be needed, it depends on the contexts since **f.h** could have other meanings in Haskell. To avoid problems, we always write **f . h** with the space for composition. In fact, this is one of the things that I could say are *ugly* of Haskell, and probably most mathematicians can understand this (or not, you are free).
+A thing to note is that **.** has an space before and after the functions it is composing, these spaces could or couldn't  be needed, it depends on the contexts since **f.h** could have other meanings in Haskell. To avoid problems, we always write **f . h** with the space for composition. In fact, this is one of the things that I could say are *ugly* of Haskell, and probably most mathematicians can understand this (or not, you are free).
 
 So, what about another short version of this **compareColors**?
 
@@ -485,49 +503,50 @@ So, what about another short version of this **compareColors**?
 \end{code}
 ~~~
 
-This time we omit second argument for **compareColors4** since Haskell can make the previous check of types for **compare2 . Pairs x** and **compareColors4** always has been a function from **Color** to a function that takes a color an returns a **EqualColors** .
+This time we omit second argument for **compareColors4** since Haskell can make the previous check of types for **compare2 . Pairs x** and **compareColors4** always has been a function from **Color** to a function that takes a **Color** an returns a **EqualColors** .
 
-Recursive types
----
 
-We are almost there, we have a way to make types, a way to know how types where made and a way to write functions about them.
-If you think on it, we are at a point like ZF where we can make sets from other sets, but we still lack the infinity axiom. 
-We don't have the same structures (union, intersection, cartesian product), but we have a set of tools that allows us to talk about  types, functions, functions composition, types composition.
-
-As with ZF, we would be motivated to have infinite elements to build at least the $\mathbb{N}$ (naturals).
-
-If you remember, one could proceed by Peano's axioms or by inductive sets. Let's use Peano's way.
+Now as last thing, we need to talk about the next code:
 
 ~~~{.haskell}
 \begin{code}
-  data Nat = 
-          Z
-        | S Nat
+  instance Show Some where
+    show Some1 = "Some1"
+
+  instance Show TwoSomes where
+   show (GivemeTwoSomes _ _) = "GivemeTwoSomes Some1 Some1"
+
+  instance Show SomeSomes where
+    show (GiveMeFourSomes _ _ _ _) = "GiveMeFourSomes Some Some Some Some"
+    show (GiveMeFiveSomes _ _ _ _ _) = "GiveMeFiveSomes Some Some Some Some Some"
+    show (GiveMeSevenSomes _ _ _ _ _ _ _) = "GiveMeSevenSomes Some Some Some Some Some Some Some"
+  
+  instance Show AnotherType where 
+    show AnotherConstructor  = "AnotherConstructor"
+
+  instance Show  AnotherType2 where
+    show  AnotherConstructor2  = "AnotherConstructor2"
+    show  AnotherConstructor2_sub = "AnotherConstructor2_sub"
+
+  instance Show AComposeType where
+    show (Compose x y ) = "Compose " ++ show x ++" "++show y
+
+  instance Show R where 
+    show R1 = "R1"
+
+  instance Show L where 
+    show (L1 x) = "L1 "++ show x
+    show (L2 x) = "L2 "++ show x
+    show (L3 x) = "L3 "++ show x
+
+  instance Show CaseType where
+    show First = "First"
+    show Second = "Second"
+  
+  instance Show ReturnType where
+    show (Return x) = "Return " ++ show x
 \end{code}
 ~~~
-  
-Let's read this as functions and types again
-
-~~~{.haskell}
-Nat::Type
-Z:: Nat
-S:: Nat -> Nat
-~~~
-
-So, we're claiming :
-
-  $\exists Nat$
-  $\exists Z:Nat$
-  $\exists S:Nat->Nat $
-  
-And by the nature of Haskell we know that if $n:Nat$ then $(S n):Nat$ and $\forall n:Nat,\,\, n \neq S n$ and $\forall n:Nat, \,\, S n \neq Z$.
-In fact we are only lacking the *There is and equality over Nat* to get a thing that follows the Peano's axioms if we ignore the fact that 
-computer can't store and infinite collection of numbers, but just as us, can encode the expression of something infinite in a finite mean.
-
-This definition is special since $Nat$ is being defined by appealing to $Nat$. Doing this kind of things is called [impredicativity](https://en.wikipedia.org/wiki/Impredicativity) . We usually forbid impredicativity in set theory since it allow us to introduce the [Russell's paradox](https://en.wikipedia.org/wiki/Russell%27s_paradox) . By incredible at that could be, there are consistent type theories that are impredicative. We won't discuss that here since the aim of Haskell isn't to be a consistent system, that could be a surprise, but in fact Haskell with all it's things, is inconsistent. That only means the following for us : 
-
-    We could use a subset of Haskell that guaranties to us it's consistency, but from time to time and in a controled way, we would use the non consistent part in the pursue to write a program.
-
-TODO: Seguir hablando de recursividad e introducir lazy haskell
-
+ 
+This code allow us to have a nice print if you import this file to ghci. As you can see, this defined some **show** functions, generally Haskell won't allow us to write more than one function with the same name, but this **instance** syntax is special. We won't discuss the instance syntax here since we need more things to be made first, so, don't think a lot on this code. 
 
