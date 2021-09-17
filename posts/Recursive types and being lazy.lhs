@@ -12,21 +12,21 @@ As with ZF, we would be motivated to have infinite elements to build at least th
 
 If you remember, one could proceed by Peano's axioms or by inductive sets. Let's use Peano's way.
 
-~~~{.haskell}
+
 \begin{code}
-  data Nat = 
-          Z
-        | S Nat
+data Nat = 
+        Z
+      | S Nat
 \end{code}
-~~~
+
   
 Let's read this as functions and types again
 
-~~~{.haskell}
+
 Nat::Type
 Z:: Nat
 S:: Nat -> Nat
-~~~
+
 
 So, we're claiming :
 
@@ -60,23 +60,23 @@ So, what's the way to define equality? For arbitrary types **X** this is even un
 
 So, first we need a type that allow us to express the end values of **equNat**, that type must have just two states **they were equal** and **they aren't equal**. We usually call this type **Bool** but as Haskell has his own type **Bool**, we can't name or type **Bool**, so lets call it **Bolean**
 
-~~~{.haskell}
+
 \begin{code}
-  data Boolean = BTrue | BFalse
+data Boolean = BTrue | BFalse
 \end{code}
-~~~
+
   
 Now for our equality function :
 
-~~~{.haskell}
+
 \begin{code}
-  equNat :: Nat -> Nat -> Boolean  
-  equNat Z Z = BTrue
-  equNat Z _ = BFalse
-  equNat _ Z = BFalse
-  equNat (S n) (S m) = equNat n m
+equNat :: Nat -> Nat -> Boolean  
+equNat Z Z = BTrue
+equNat Z _ = BFalse
+equNat _ Z = BFalse
+equNat (S n) (S m) = equNat n m
 \end{code}
-~~~
+
   
 
 This must be obvious, two **Nats** are equal of both are **Z** or comes from the same term by the use of **S**.
@@ -89,29 +89,28 @@ Even better, we could proof, this function allow us to have naturals by Peano's 
 
 Now that we have the basics cover, we could define the **+** function.
 
-~~~{.haskell}
+
 \begin{code}
-  add :: Nat -> Nat -> Nat
-  add Z m = m
-  add (S n) m = S (add n m)
+add :: Nat -> Nat -> Nat
+add Z m = m
+add (S n) m = S (add n m)
 \end{code}
-~~~
+
   
 With those functions as base, we could talk about a particular thing about Haskell called **laziness**. 
 
 Until now, we haven't talk about a crucial thing, How Haskell computes something like **Add (S Z) Z**? 
 We have relied in our math intuition to understand how this could be accomplished but this need some care, since math intuition about this isn't equal to Haskell evaluation way.
 
-~~~{.haskell}
+
 \begin{code}
-  instance Show Nat where
-    show Z = "Z"
-    show (S n) = "(S "++show n++")"
+instance Show Nat where
+  show Z = "Z"
+  show (S n) = "(S "++show n++")"
 
-  instance Show Boolean where
-    show BTrue = "True"
-    show BFalse = "False"
-
+instance Show Boolean where
+  show BTrue = "True"
+  show BFalse = "False"
 \end{code}
-~~~
+
   

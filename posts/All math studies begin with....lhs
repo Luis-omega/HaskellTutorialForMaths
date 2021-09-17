@@ -6,11 +6,11 @@ tags: Tutorial, TypeTheory, Maths
 
 Most programming languages tutorials begin on the lines of a program like :
 
-~~~{.haskell}
+
 \begin{code}
-  main = putStrLn "Hellow world!"
+main = putStrLn "Hellow world!"
 \end{code}
-~~~
+
   
 Since we already understand math, we could begin without that sort of thing, of course we
 finally would come to that, but right now, we could (and we would!) discuss Haskell 
@@ -59,11 +59,11 @@ Notation is syntax here, more or less...
 
 In Haskell the way to claim **Some** is a *type* that has an inhabitant **Some1** (an element of, in set terms), is:
 
-~~~{.haskell}
+
 \begin{code}
-  data Some = Some1
+data Some = Some1
 \end{code}
-~~~
+
 
 Haskell only allow us to make types that begin with upper letters, we would look at the reason behind  this 
 in the future.
@@ -84,9 +84,9 @@ So things can have a type, nice.
 
 The ugly thing here is that Haskell uses the syntax 
 
-~~~{.haskell}
+
 Some1::Some
-~~~
+
   
 to say **Some1** has type **Some**.
 
@@ -95,9 +95,9 @@ That's since Haskell uses **:** alone to another thing. This means that we would
 
 Another thing to note in this example is that **Some1** has two meanings in 
 
-~~~{.haskell}
+
 data Some = Some1
-~~~
+
 
 One of them is :
     
@@ -125,11 +125,11 @@ Constructors
 
 That say, we could compose **Types** to make new types in a nice way :
 
-~~~{.haskell}
+
 \begin{code}
-  data  TwoSomes = GivemeTwoSomes Some Some 
+data  TwoSomes = GivemeTwoSomes Some Some 
 \end{code}
-~~~
+
   
 This read as :
   
@@ -147,9 +147,9 @@ make an element of type **TwoSomes**.
 
 Let's examine **GivemeTwoSomes** type in Haskell :
 
-~~~{.haskell}
+
 GivemeTwoSomes:: Some -> (Some -> TwoSomes)
-~~~
+
 
 Is almost the same! 
 
@@ -164,19 +164,19 @@ So, Haskell uses the later way to treat functions, usually referring to this as 
 This means that we only have functions of one element in Haskell, but those functions can return another functions.
 Of course in practice we can't just use functions of one element, so Haskell syntax allow us to write both:  
 
-~~~{.haskell}
+
 GivemeTwoSomes:: Some -> Some -> TwoSomes
 GivemeTwoSomes:: Some -> (Some -> TwoSomes)
-~~~
+
 
 with the same meaning.
 
 In the general case :
 
-~~~{.haskell}
+
 T :: a -> b -> (c -> d) -> f -> g 
 T :: a ->(b ->((c -> d) ->( f -> g)))
-~~~
+
 
 Usually this is expressed by saying :
 
@@ -201,40 +201,40 @@ Types with more constructors.
 
 Since we are making new types by defining a function that takes other types and get us our newtype, nothing stop us to use more than one function.
 
-~~~{.haskell}
+
 data SomeSomes =  GiveMeFourSomes Some Some Some Some
               | GiveMeFiveSomes Some Some Some Some Some
               | GiveMeSevenSomes Some Some Some Some Some Some Some
-~~~
+
   
 Here the **|** is used to separate the different constructors, ins fact we could write :
 
 
-~~~{.haskell}
+
 data SomeSomes =  GiveMeFourSomes Some Some Some Some | GiveMeFiveSomes Some Some Some Some Some | GiveMeSevenSomes Some Some Some Some Some Some Some
-~~~
+
 
 
 Or more aesthetics
 
-~~~{.haskell}
+
 \begin{code}
-  data SomeSomes =  
-       GiveMeFourSomes Some Some Some Some
-       | GiveMeFiveSomes Some Some Some Some Some
-       | GiveMeSevenSomes Some Some Some Some Some Some Some
+data SomeSomes =  
+     GiveMeFourSomes Some Some Some Some
+     | GiveMeFiveSomes Some Some Some Some Some
+     | GiveMeSevenSomes Some Some Some Some Some Some Some
 \end{code}
-~~~
+
 
 
 The only requirement here is to put all the constructors for **SomeSomes** more at the right than the first column. This allows us to write
 
-~~~{.haskell}
+
 data SomeSomes =  
        GiveMeFourSomes Some Some Some Some
              | GiveMeFiveSomes Some Some Some Some Some
   | GiveMeSevenSomes Some Some Some Some Some Some Some
-~~~
+
 
 But please, for Hilbert sake, don't do that!
 
@@ -248,15 +248,15 @@ Types with more than one type
 Of course, we aren't limited to write only **Some** type, so :
 
 
-~~~{.haskell}
+
 \begin{code}
-  data AnotherType = AnotherConstructor 
-  data AnotherType2 = 
-      AnotherConstructor2 
-      | AnotherConstructor2_sub
-  data AComposeType = Compose AnotherType AnotherType2
+data AnotherType = AnotherConstructor 
+data AnotherType2 = 
+    AnotherConstructor2 
+    | AnotherConstructor2_sub
+data AComposeType = Compose AnotherType AnotherType2
 \end{code}
-~~~
+
   
 
 Here we need to talk about the relation between **constructors** of the same **type**.
@@ -268,15 +268,15 @@ is always different.
 
 Another example :
 
-~~~{.haskell}
+
 \begin{code}
-  data R = R1
-  data L = 
-        L1 R
-        | L2 R 
-        | L3 R
+data R = R1
+data L = 
+      L1 R
+      | L2 R 
+      | L3 R
 \end{code}
-~~~
+
   
 
 In math terms we could write it like:
@@ -304,15 +304,15 @@ So, until now we only have defined types, but we haven't write a function that d
 First some types
 
 
-~~~{.haskell}
+
 \begin{code}
-  data CaseType = 
-          First
-        | Second 
-  
-  data ReturnType = Return CaseType
+data CaseType = 
+        First
+      | Second 
+
+data ReturnType = Return CaseType
 \end{code}
-~~~
+
 
 Our task would be to write a function that take a **CaseType** an if it was made from **First** return **Return(Second)** otherwise return **Return(First)**. 
 In math :
@@ -326,12 +326,12 @@ In math :
 An here comes (a ugly form for this simple case) a way to implement it in Haskell
 
 
-~~~{.haskell}
+
 f :: CaseType -> ReturnType
 f x = case x of 
         First -> Return Second
         Second -> Return First
-~~~
+
   
 There's a lot to talk here.
 
@@ -344,25 +344,25 @@ There's a lot to talk here.
 
 Something beautiful is that we could write :
 
-~~~{.haskell}
+
 \begin{code}
-  f First = Return Second
-  f Second = Return First
+f First = Return Second
+f Second = Return First
 \end{code}
-~~~
+
 
 So, Haskell syntax allows us to make the **case/pattern match** at the left side of the **=**. This is almost the same as the mathematical way to write the function.
 
 
 What happens to this if we have bigger cases?
 
-~~~{.haskell}
+
 \begin{code}
-  data Color = Red | Blue| Yellow
-  data ColorPairs = Pairs Color Color
-  data EqualColors = Yes | No 
+data Color = Red | Blue| Yellow
+data ColorPairs = Pairs Color Color
+data EqualColors = Yes | No 
 \end{code}
-~~~
+
 
 We would define a function **compare** that takes a pair and returns a **Yes** if both colors are equal, otherwise **No**.
 
@@ -373,23 +373,23 @@ $compare((x,y))= Yes \quad \text{if} \quad x = y$
 $compare((x,y))= No \quad \text{if} \quad x \neq y$
   
 
-~~~{.haskell}
+
 \begin{code}
-  compare (Pairs x y) = 
-    case y of 
-      Red -> case x of 
-              Red -> Yes
-              Blue-> No
-              Yellow-> No
-      Blue -> case x of 
-                Blue -> Yes  
-                _ -> No
-      Yellow -> 
-        case x of 
-          Yellow -> Yes
-          _ -> No
+compare (Pairs x y) = 
+  case y of 
+    Red -> case x of 
+            Red -> Yes
+            Blue-> No
+            Yellow-> No
+    Blue -> case x of 
+              Blue -> Yes  
+              _ -> No
+    Yellow -> 
+      case x of 
+        Yellow -> Yes
+        _ -> No
 \end{code}
-~~~
+
   
 This is quite large, but follows some rules.
 
@@ -402,94 +402,94 @@ This is quite large, but follows some rules.
 
 In **(Pairs x y)**, the parents are needed since, if you remember
 
-~~~{.haskell}
+
 Pairs :: Color -> Color -> ColorPairs 
 Pairs :: Color -> (Color -> ColorPairs)
-~~~
+
 
 And we have 
 
-~~~{.haskell}
+
 compare :: ColorPairs -> EqualColors
-~~~
+
 
 So, adding parents to the next expression
 
-~~~{.haskell}
+
 compare Pairs x y
 ((compare Pairs) x) y
-~~~
+
 
 While we want 
 
-~~~{.haskell}
+
 compare ((Pairs x) y)
-~~~
+
  
 Why the parents goes to the left? 
 
 If you think of it, is just because **(->)** goes to the right. By using this convention we could omit parents in things like: 
 
-~~~{.haskell}
+
 f :: a -> b -> c -> d
 f a1 :: b -> c -> d
 f a1 b1 :: c -> d
 f a1 b1 c1 ::  d
-~~~
+
   
 
 Now simplifying as before, and calling the function **compare2**:
 
 
-~~~{.haskell}
+
 \begin{code}
-  compare2 (Pairs Red Red) = Yes
-  compare2 (Pairs Yellow Yellow) = Yes
-  compare2 (Pairs Blue Blue) = Yes
-  compare2 (Pairs _ _ ) = No
+compare2 (Pairs Red Red) = Yes
+compare2 (Pairs Yellow Yellow) = Yes
+compare2 (Pairs Blue Blue) = Yes
+compare2 (Pairs _ _ ) = No
 \end{code}
-~~~
+
   
 What a bout a function that takes two **Colors** and return **EqualColors** the same way as **compare** and **compare2**?
 
 
 
-~~~{.haskell}
+
 \begin{code}
-  compareColors Red Red = Yes
-  compareColors Yellow Yellow = Yes
-  compareColors  Blue Blue = Yes
-  compareColors  _ _  = No
+compareColors Red Red = Yes
+compareColors Yellow Yellow = Yes
+compareColors  Blue Blue = Yes
+compareColors  _ _  = No
 \end{code}
-~~~
+
 
 Or the one liner :
 
-~~~{.haskell}
+
 \begin{code}
-  compareColors2 x y = compare2 (Pairs x y)
+compareColors2 x y = compare2 (Pairs x y)
 \end{code}
-~~~
+
   
 Did you remember that **Pairs** is a function right? What if i show you the composition operator "**.**"?
 
 
-~~~{.haskell}
+
 \begin{code}
-  compareColors3 x y = (compare2 . Pairs x) y 
+compareColors3 x y = (compare2 . Pairs x) y 
 \end{code}
-~~~
+
 
 Here we are legitimate composing **compare2** and **Pairs x** since:
 
-~~~{.haskell}
+
 x ::Color
 Pairs :: Color -> (Color  -> ColorPairs)
 Pairs x :: Color  -> ColorPAirs
 compare2 :: ColorPairs -> EqualColors
 compare2 . (Pairs x) :: Color -> EqualColors
 compare2 . Pairs x :: Color -> EqualColors
-~~~
+
  
 We could omit the **()** since we have **.**  here, more on that other day.
 
@@ -497,56 +497,56 @@ A thing to note is that **.** has an space before and after the functions it is 
 
 So, what about another short version of this **compareColors**?
 
-~~~{.haskell}
+
 \begin{code}
-  compareColors4 x = compare2 . Pairs x  
+compareColors4 x = compare2 . Pairs x  
 \end{code}
-~~~
+
 
 This time we omit second argument for **compareColors4** since Haskell can make the previous check of types for **compare2 . Pairs x** and **compareColors4** always has been a function from **Color** to a function that takes a **Color** an returns a **EqualColors** .
 
 
 Now as last thing, we need to talk about the next code:
 
-~~~{.haskell}
+
 \begin{code}
-  instance Show Some where
-    show Some1 = "Some1"
+instance Show Some where
+  show Some1 = "Some1"
 
-  instance Show TwoSomes where
-   show (GivemeTwoSomes _ _) = "GivemeTwoSomes Some1 Some1"
+instance Show TwoSomes where
+ show (GivemeTwoSomes _ _) = "GivemeTwoSomes Some1 Some1"
 
-  instance Show SomeSomes where
-    show (GiveMeFourSomes _ _ _ _) = "GiveMeFourSomes Some Some Some Some"
-    show (GiveMeFiveSomes _ _ _ _ _) = "GiveMeFiveSomes Some Some Some Some Some"
-    show (GiveMeSevenSomes _ _ _ _ _ _ _) = "GiveMeSevenSomes Some Some Some Some Some Some Some"
-  
-  instance Show AnotherType where 
-    show AnotherConstructor  = "AnotherConstructor"
+instance Show SomeSomes where
+  show (GiveMeFourSomes _ _ _ _) = "GiveMeFourSomes Some Some Some Some"
+  show (GiveMeFiveSomes _ _ _ _ _) = "GiveMeFiveSomes Some Some Some Some Some"
+  show (GiveMeSevenSomes _ _ _ _ _ _ _) = "GiveMeSevenSomes Some Some Some Some Some Some Some"
 
-  instance Show  AnotherType2 where
-    show  AnotherConstructor2  = "AnotherConstructor2"
-    show  AnotherConstructor2_sub = "AnotherConstructor2_sub"
+instance Show AnotherType where 
+  show AnotherConstructor  = "AnotherConstructor"
 
-  instance Show AComposeType where
-    show (Compose x y ) = "Compose " ++ show x ++" "++show y
+instance Show  AnotherType2 where
+  show  AnotherConstructor2  = "AnotherConstructor2"
+  show  AnotherConstructor2_sub = "AnotherConstructor2_sub"
 
-  instance Show R where 
-    show R1 = "R1"
+instance Show AComposeType where
+  show (Compose x y ) = "Compose " ++ show x ++" "++show y
 
-  instance Show L where 
-    show (L1 x) = "L1 "++ show x
-    show (L2 x) = "L2 "++ show x
-    show (L3 x) = "L3 "++ show x
+instance Show R where 
+  show R1 = "R1"
 
-  instance Show CaseType where
-    show First = "First"
-    show Second = "Second"
-  
-  instance Show ReturnType where
-    show (Return x) = "Return " ++ show x
+instance Show L where 
+  show (L1 x) = "L1 "++ show x
+  show (L2 x) = "L2 "++ show x
+  show (L3 x) = "L3 "++ show x
+
+instance Show CaseType where
+  show First = "First"
+  show Second = "Second"
+
+instance Show ReturnType where
+  show (Return x) = "Return " ++ show x
 \end{code}
-~~~
+
  
 This code allow us to have a nice print if you import this file to ghci. As you can see, this defined some **show** functions, generally Haskell won't allow us to write more than one function with the same name, but this **instance** syntax is special. We won't discuss the instance syntax here since we need more things to be made first, so, don't think a lot on this code. 
 

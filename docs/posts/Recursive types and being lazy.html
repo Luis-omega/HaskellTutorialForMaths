@@ -35,13 +35,11 @@
 <p>Past time we were almost there, we have a way to make types, a way to know how types where made and a way to write functions about them. If you think on it, we are at a point like ZF where we can make sets from other sets, but we still lack the infinity axiom. We don’t have the same structures (union, intersection, cartesian product), but we have a set of tools that allows us to talk about types, functions, functions composition, types composition.</p>
 <p>As with ZF, we would be motivated to have infinite elements to build at least the <span class="math inline">\(\mathbb{N}\)</span> (naturals).</p>
 <p>If you remember, one could proceed by Peano’s axioms or by inductive sets. Let’s use Peano’s way.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">Nat</span> <span class="ot">=</span> </span>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">Nat</span> <span class="ot">=</span> </span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>        <span class="dt">Z</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>      <span class="op">|</span> <span class="dt">S</span> <span class="dt">Nat</span></span></code></pre></div>
 <p>Let’s read this as functions and types again</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="dt">Nat</span><span class="ot">::</span><span class="dt">Type</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="dt">Z</span><span class="ot">::</span> <span class="dt">Nat</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="dt">S</span><span class="ot">::</span> <span class="dt">Nat</span> <span class="ot">-&gt;</span> <span class="dt">Nat</span></span></code></pre></div>
+<p>Nat::Type Z:: Nat S:: Nat -&gt; Nat</p>
 <p>So, we’re claiming :</p>
 <p><span class="math inline">\(\exists Nat, \quad \exists Z:Nat, \quad \exists S:Nat-&gt;Nat\)</span></p>
 <p>And by the nature of Haskell we know that if <span class="math inline">\(n:Nat\)</span> then <span class="math inline">\((S\, n):Nat\)</span> and <span class="math inline">\(\forall n:Nat,\,\, n \neq S\, n\)</span> and <span class="math inline">\(\forall n:Nat, \,\, S n \neq Z\)</span>. In fact we are only lacking the <em>There is and equality over Nat</em>, to get a thing that follows the Peano’s axioms, if we ignore the fact that computer can’t store and infinite collection of numbers, but just as us, can encode the expression of something infinite in a finite mean.</p>
@@ -56,33 +54,30 @@
 <p>So, what’s the way to define equality? For arbitrary types <strong>X</strong> this is even undecidable in <strong>Haskell</strong>, but for this type <strong>Nat</strong> we could define a equality by the obvious way:</p>
 <pre><code>Define a function equNat: Nat -&gt; Nat -&gt; Some type that means equal or unequal </code></pre>
 <p>So, first we need a type that allow us to express the end values of <strong>equNat</strong>, that type must have just two states <strong>they were equal</strong> and <strong>they aren’t equal</strong>. We usually call this type <strong>Bool</strong> but as Haskell has his own type <strong>Bool</strong>, we can’t name or type <strong>Bool</strong>, so lets call it <strong>Bolean</strong></p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">Boolean</span> <span class="ot">=</span> <span class="dt">BTrue</span> <span class="op">|</span> <span class="dt">BFalse</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">Boolean</span> <span class="ot">=</span> <span class="dt">BTrue</span> <span class="op">|</span> <span class="dt">BFalse</span></span></code></pre></div>
 <p>Now for our equality function :</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ot">equNat ::</span> <span class="dt">Nat</span> <span class="ot">-&gt;</span> <span class="dt">Nat</span> <span class="ot">-&gt;</span> <span class="dt">Boolean</span>  </span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>equNat <span class="dt">Z</span> <span class="dt">Z</span> <span class="ot">=</span> <span class="dt">BTrue</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>equNat <span class="dt">Z</span> _ <span class="ot">=</span> <span class="dt">BFalse</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>equNat _ <span class="dt">Z</span> <span class="ot">=</span> <span class="dt">BFalse</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>equNat (<span class="dt">S</span> n) (<span class="dt">S</span> m) <span class="ot">=</span> equNat n m</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ot">equNat ::</span> <span class="dt">Nat</span> <span class="ot">-&gt;</span> <span class="dt">Nat</span> <span class="ot">-&gt;</span> <span class="dt">Boolean</span>  </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>equNat <span class="dt">Z</span> <span class="dt">Z</span> <span class="ot">=</span> <span class="dt">BTrue</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>equNat <span class="dt">Z</span> _ <span class="ot">=</span> <span class="dt">BFalse</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>equNat _ <span class="dt">Z</span> <span class="ot">=</span> <span class="dt">BFalse</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>equNat (<span class="dt">S</span> n) (<span class="dt">S</span> m) <span class="ot">=</span> equNat n m</span></code></pre></div>
 <p>This must be obvious, two <strong>Nats</strong> are equal of both are <strong>Z</strong> or comes from the same term by the use of <strong>S</strong>.</p>
 <p>In this case, we use pattern match in both terms to cover all the cases. Additionally we recursive defined the function by appealing to previous values.</p>
 <p>So, we really could proof by induction that this functions is well defined and ends on every two <strong>Nat</strong>.</p>
 <p>Even better, we could proof, this function allow us to have naturals by Peano’s axioms.</p>
 <p>Now that we have the basics cover, we could define the <strong>+</strong> function.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ot">add ::</span> <span class="dt">Nat</span> <span class="ot">-&gt;</span> <span class="dt">Nat</span> <span class="ot">-&gt;</span> <span class="dt">Nat</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>add <span class="dt">Z</span> m <span class="ot">=</span> m</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>add (<span class="dt">S</span> n) m <span class="ot">=</span> <span class="dt">S</span> (add n m)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ot">add ::</span> <span class="dt">Nat</span> <span class="ot">-&gt;</span> <span class="dt">Nat</span> <span class="ot">-&gt;</span> <span class="dt">Nat</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>add <span class="dt">Z</span> m <span class="ot">=</span> m</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>add (<span class="dt">S</span> n) m <span class="ot">=</span> <span class="dt">S</span> (add n m)</span></code></pre></div>
 <p>With those functions as base, we could talk about a particular thing about Haskell called <strong>laziness</strong>.</p>
 <p>Until now, we haven’t talk about a crucial thing, How Haskell computes something like <strong>Add (S Z) Z</strong>? We have relied in our math intuition to understand how this could be accomplished but this need some care, since math intuition about this isn’t equal to Haskell evaluation way.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>\begin{code}</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">instance</span> <span class="dt">Show</span> <span class="dt">Nat</span> <span class="kw">where</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">show</span> <span class="dt">Z</span> <span class="ot">=</span> <span class="st">&quot;Z&quot;</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">show</span> (<span class="dt">S</span> n) <span class="ot">=</span> <span class="st">&quot;(S &quot;</span><span class="op">++</span><span class="fu">show</span> n<span class="op">++</span><span class="st">&quot;)&quot;</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">instance</span> <span class="dt">Show</span> <span class="dt">Boolean</span> <span class="kw">where</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">show</span> <span class="dt">BTrue</span> <span class="ot">=</span> <span class="st">&quot;True&quot;</span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">show</span> <span class="dt">BFalse</span> <span class="ot">=</span> <span class="st">&quot;False&quot;</span></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>\end{code}</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">Show</span> <span class="dt">Nat</span> <span class="kw">where</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">show</span> <span class="dt">Z</span> <span class="ot">=</span> <span class="st">&quot;Z&quot;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">show</span> (<span class="dt">S</span> n) <span class="ot">=</span> <span class="st">&quot;(S &quot;</span><span class="op">++</span><span class="fu">show</span> n<span class="op">++</span><span class="st">&quot;)&quot;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">Show</span> <span class="dt">Boolean</span> <span class="kw">where</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">show</span> <span class="dt">BTrue</span> <span class="ot">=</span> <span class="st">&quot;True&quot;</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">show</span> <span class="dt">BFalse</span> <span class="ot">=</span> <span class="st">&quot;False&quot;</span></span></code></pre></div>
 
         </div>
         <div id="footer">
