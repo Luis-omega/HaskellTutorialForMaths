@@ -11,7 +11,6 @@ import Text.Pandoc.Extensions
 import Data.Maybe
 import Debug.Trace
 
-import ParserH
 
 config :: Configuration
 config = defaultConfiguration
@@ -40,7 +39,7 @@ main = hakyllWith config $ do
     match "posts/*" $ do
         route $ setExtension "html"
         compile $ getResourceBody 
-          >>=  renderPandocWith pandocReaderOptions pandocWriteOptions . fmap parseLiterated 
+          >>=  renderPandocWith pandocReaderOptions pandocWriteOptions 
           >>= loadAndApplyTemplate "templates/post.html"    postCtx 
           >>= loadAndApplyTemplate "templates/default.html" postCtx
           >>= relativizeUrls 
@@ -99,10 +98,7 @@ pandocCodeStyle = espresso
 
 pandocWriteOptions :: T.WriterOptions
 pandocWriteOptions = defaultHakyllWriterOptions {T.writerHighlightStyle=Just pandocCodeStyle,
-  T.writerHTMLMathMethod= T.MathJax "",
-  T.writerExtensions = extensions }
-  where
-    extensions = T.enableExtension Ext_literate_haskell $T.writerExtensions defaultHakyllWriterOptions
+  T.writerHTMLMathMethod= T.MathJax ""}
 
 
 pandocReaderOptions :: T.ReaderOptions
@@ -110,19 +106,6 @@ pandocReaderOptions = defaultHakyllReaderOptions {T.readerExtensions= newExtensi
   where
   newExtensions = T.enableExtension Ext_literate_haskell $T.readerExtensions defaultHakyllReaderOptions
   newExtensions2 = T.enableExtension Ext_tex_math_dollars newExtensions
-
-
-cleanCodeBlock :: Block -> Block
-cleanCodeBlock (CodeBlock attribs text) = 
-  let stripedSufix = fromMaybe text $ Te.stripSuffix "\\end{code}" text in
-  let striped = fromMaybe stripedSufix $ Te.stripPrefix "\\begin{code}" stripedSufix in
-    CodeBlock attribs striped
-cleanCodeBlock a = a
-
-pandocCodeBlockTransform ::Pandoc -> Compiler Pandoc
-pandocCodeBlockTransform p= return $ trace (show out) out
-  where 
-    out = (walk cleanCodeBlock (trace (show p) p))
 
 
 
