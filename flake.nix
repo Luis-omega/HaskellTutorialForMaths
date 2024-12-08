@@ -28,7 +28,7 @@
           };
           hspkgs = pkgs.haskellPackages;
           treefmtEval = inputs.treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
-          project_root = ./docs;
+          project_root = ./posts;
           spell-check =
             pkgs.runCommandLocal "spell-check"
               {
@@ -44,7 +44,7 @@
         {
           devShell = hspkgs.shellFor {
             withHoogle = true;
-            packages = p: [ p.jam ];
+            packages = p: [ p.post ];
             buildInputs = [
               hspkgs.cabal-install
               hspkgs.cabal-fmt
@@ -56,7 +56,7 @@
               pkgs.typos
             ];
           };
-          defaultPackage = pkgs.jam;
+          defaultPackage = pkgs.post;
           formatter = treefmtEval.config.build.wrapper;
           checks = {
             formatting = treefmtEval.config.build.check inputs.self;
