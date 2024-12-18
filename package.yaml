@@ -1,14 +1,12 @@
-name:                HaskellTutorialForMaths
-version:             0.1.0.0
-github:              "Luis-omega/HaskellTutorialForMaths"
-license:             BSD3
-author:              "Luis Alberto Díaz Díaz"
-maintainer:          "anon@anon.com"
-copyright:           "MIT"
-
+name: HaskellTutorialForMaths
+version: 0.1.0.0
+github: "Luis-omega/HaskellTutorialForMaths"
+license: BSD3
+author: "Luis Alberto Díaz Díaz"
+maintainer: "anon@anon.com"
+copyright: "MIT"
 extra-source-files:
-- README.md
-
+  - README.md
 # Metadata used when publishing your package
 # synopsis:            Short description of your package
 # category:            Web
@@ -16,31 +14,27 @@ extra-source-files:
 # To avoid duplicated efforts in documentation and dealing with the
 # complications of embedding Haddock markup inside cabal files, it is
 # common to point users to the README.md file.
-description:         Please see the README on GitHub at <https://github.com/Luis-omega/HaskellTutorialForMaths#readme>
-
+description: Please see the README on GitHub at <https://github.com/Luis-omega/HaskellTutorialForMaths#readme>
 dependencies:
-- base >= 4.7 && < 5
-- text
-- mtl
-- megaparsec
-- parser-combinators
-- pandoc
-- pandoc-types
-- hakyll
-- skylighting-core
-
+  - base >= 4.7 && < 5
+  - text
+  - mtl
+  - megaparsec
+  - parser-combinators
+  - pandoc
+  - pandoc-types
+  - hakyll
+  - skylighting-core
 library:
   source-dirs: .
-
 executables:
   HaskellTutorialForMaths-exe:
-    main:                site.hs
-    source-dirs:         .
+    main: site.hs
+    source-dirs: .
     ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
-    - -optL -q
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+      - -optL -q
     dependencies:
-    - HaskellTutorialForMaths
-
+      - HaskellTutorialForMaths

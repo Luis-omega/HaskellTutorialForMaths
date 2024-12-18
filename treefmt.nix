@@ -7,7 +7,7 @@
   programs.nixpkgs-fmt.enable = true;
   programs.cabal-fmt.enable = true;
   programs.hlint.enable = true;
-  programs.mdformat.enable = true;
+  programs.mdformat.enable = false;
   programs.yamlfmt.enable = true;
   programs.toml-sort.enable = true;
   programs.beautysh.enable = true;

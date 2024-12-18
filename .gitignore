@@ -19,6 +19,8 @@ cabal.sandbox.config
 .stack-work/
 _cache/
 _site/
+dist-newstyle
 
 ### added by my
 pdf/
+AdventOfCode/Data

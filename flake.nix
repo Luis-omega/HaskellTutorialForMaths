@@ -28,7 +28,8 @@
           };
           hspkgs = pkgs.haskellPackages;
           treefmtEval = inputs.treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
-          project_root = ./posts;
+          posts_root = ./posts;
+          posts_advent_of_code = ./AdventOfCode/Blogs;
           spell-check =
             pkgs.runCommandLocal "spell-check"
               {
@@ -36,7 +37,9 @@
                 nativeBuildInputs = with pkgs; [ pkgs.typos ];
               }
               ''
-                cd ${project_root}
+                cd ${posts_root}
+                typos
+                cd ${posts_advent_of_code}
                 typos
                 mkdir $out
               '';
