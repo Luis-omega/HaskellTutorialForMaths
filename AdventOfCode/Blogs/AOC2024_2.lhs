@@ -15,7 +15,7 @@ newtype Report = Report [Int] deriving (Show)
 
 data Direction = Increase | Decrease deriving (Show, Eq)
 
-data Distance = One | Two | Three | Excesive deriving (Show, Eq)
+data Distance = One | Two | Three | Excessive deriving (Show, Eq)
 
 parseReport :: String -> Maybe Report
 parseReport input = Report <$> traverse readMaybe (words input)
@@ -40,7 +40,7 @@ ints2Distance x y =
             else
               if intDistance == 3
                 then Three
-                else Excesive
+                else Excessive
 
 checkReportStart :: Report -> (Direction, Distance, Int, [Int])
 checkReportStart (Report (x1 : x2 : tail)) =
@@ -53,13 +53,13 @@ checkWith direction prev (next : tail) =
   let newDirection = ints2Direction prev next
       newDistance = ints2Distance prev next
    in direction == newDirection
-        && (newDistance /= Excesive)
+        && (newDistance /= Excessive)
         && checkWith direction next tail
 
 checkReport :: Report -> Bool
 checkReport report =
   let (direction, distance, last, tail) = checkReportStart report
-   in if distance == Excesive then False else checkWith direction last tail
+   in if distance == Excessive then False else checkWith direction last tail
 
 countReports :: [Report] -> Int
 countReports reports =

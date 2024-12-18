@@ -37,10 +37,7 @@
                 nativeBuildInputs = with pkgs; [ pkgs.typos ];
               }
               ''
-                cd ${posts_root}
-                typos
-                cd ${posts_advent_of_code}
-                typos
+                typos ${posts_root} ${posts_advent_of_code}
                 mkdir $out
               '';
         in
