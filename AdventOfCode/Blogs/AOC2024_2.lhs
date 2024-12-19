@@ -4,8 +4,11 @@ date: 2024-11-17
 tags: Tutorial, advent of code, 2024
 ------
 
+This is still a draft!
+===
+
 \begin{code}
-module Blogs.AOC2024_2 (solve) where
+module Blogs.AOC2024_2 (solve1,solve2) where
 
 import GHC.IO.IOMode (IOMode (ReadMode))
 import System.IO (openFile)
@@ -30,17 +33,13 @@ ints2Direction x y =
     else Decrease
 
 ints2Distance :: Int -> Int -> Distance
-ints2Distance x y =
-  let intDistance = abs (x - y)
-   in if intDistance == 1
-        then One
-        else
-          if intDistance == 2
-            then Two
-            else
-              if intDistance == 3
-                then Three
-                else Excessive
+ints2Distance x y
+     | intDistance == 1 = One
+     | intDistance == 2 = Two
+     | intDistance == 3 = Three
+     | otherwise = Excessive
+  where
+    intDistance = abs (x - y)
 
 checkReportStart :: Report -> (Direction, Distance, Int, [Int])
 checkReportStart (Report (x1 : x2 : tail)) =
@@ -59,7 +58,7 @@ checkWith direction prev (next : tail) =
 checkReport :: Report -> Bool
 checkReport report =
   let (direction, distance, last, tail) = checkReportStart report
-   in if distance == Excessive then False else checkWith direction last tail
+   in distance /= Excessive && checkWith direction last tail
 
 countReports :: [Report] -> Int
 countReports reports =
@@ -72,12 +71,56 @@ extractOrFail :: Maybe a -> IO a
 extractOrFail (Just x) = pure x
 extractOrFail Nothing = error "Can't extract!"
 
-solve :: IO ()
-solve = do
-  content <- readFile "AdventOfCode/Data/2024/2_1.txt"
+solve1 :: IO ()
+solve1 = do
+  content <- readFile "AdventOfCode/Data/2024/2.txt"
   reports <- extractOrFail $ parseReports content
   let count = countReports reports
-  -- 585
+  -- the solution for my input! 585
+  print count
+
+
+removeItemN :: Int -> Report -> Report
+removeItemN n (Report l) =
+  let (start,end) = splitAt n l
+  in
+  case end of
+    [] -> Report start
+    (_:xs) -> Report (start++xs)
+
+range :: Int -> [Int]
+range n = if n<0 then [] else n : range (n-1)
+
+len :: Report -> Int
+len (Report x) = length x
+
+tryRemovingN :: Report -> Int -> Bool
+tryRemovingN report n =
+  let newReport = removeItemN n report
+      checked =  checkReport newReport
+  in if checked then  checked else checked
+
+checkReport2 :: Report -> Bool
+checkReport2 report =
+  let indexes = (reverse . range . len) report
+  in
+    any ((\ x y -> checkReport x || tryRemovingN x y) report) indexes
+
+
+countReports2 :: [Report] -> Int
+countReports2 reports =
+  foldr
+    (\result acc -> if result then 1 + acc else acc)
+    0
+    (checkReport2 <$> reports)
+
+
+solve2 :: IO ()
+solve2 = do
+  content <- readFile "AdventOfCode/Data/2024/2.txt"
+  reports <- extractOrFail $ parseReports content
+  let count = countReports2 reports
+  -- the solution for my input! 626
   print count
 
 \end{code}
