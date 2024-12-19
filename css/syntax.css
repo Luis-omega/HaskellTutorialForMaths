@@ -2,13 +2,13 @@ a.sourceLine { display: inline-block; line-height: 1.25; }
 a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
 a.sourceLine:empty { height: 1.2em; }
 .code, .sourceCode, .mathJaxCustom {
-  margin-top: 0.8em; 
+  margin-top: 0.8em;
   margin-bottom: 0.8em;
   overflow: auto;
 }
 @media (min-width:1024px) {
   .code, .sourceCode, .mathJaxCustom {
-  margin-top: 0.3em; 
+  margin-top: 0.3em;
   margin-bottom: 0.3em;
   }
 }
@@ -20,8 +20,8 @@ code { word-wrap: break-word; white-space: normal; background:rgba(200,200,200,8
 @media (min-width:1024px) {code { font-size: 1.5em;}}
 div.sourceCode { margin: 1em 0;}
 @media screen {
-div.sourceCode { overflow: auto; background: rgba(0,0,0,200);color:white; font-size:1.2em;}
-@media (min-width:1024px) {div.sourceCode { overflow: auto; background: black;color:white; font-size:1.6em;}}
+div.sourceCode { overflow: auto; background: rgba(0,0,0,200);color:#e7dbdb; font-size:1.2em;}
+@media (min-width:1024px) {div.sourceCode { overflow: auto; background: black;color:#e7dbdb; font-size:1.6em;}}
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
@@ -62,11 +62,11 @@ code span.dv { color: #40a070; } /* DecVal */
 code span.er { color: #ff0000; font-weight: bold; } /* Error */
 code span.ex { } /* Extension */
 code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #ffffff; } /* Function */
+code span.fu { color: #e7dbdb; } /* Function */
 /*code span.fu { color: #06287e; } /* Function */
 code span.im { } /* Import */
 code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.kw { color: #e7dbdb; font-weight: bold; } /* Keyword */
 code span.op { color: #666666; font-weight: bold; } /* Operator */
 /*code span.op { color: #666666; } /* Operator */
 code span.ot { color: #a980c6; font-weight: bold; } /* Other */
