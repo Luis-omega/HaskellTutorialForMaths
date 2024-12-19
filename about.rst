@@ -1,17 +1,14 @@
 ---
 title: About
 ---
-Nullam imperdiet sodales orci vitae molestie. Nunc quam orci, pharetra a
-rhoncus vitae, eleifend id felis. Suspendisse potenti. Etiam vitae urna orci.
-Quisque pellentesque dignissim felis, egestas tempus urna luctus vitae. In hac
-habitasse platea dictumst. Morbi fringilla mattis odio, et mattis tellus
-accumsan vitae.
 
-1. Amamus Unicode 碁
-2. Interdum nex magna.
+I'm a Mexican mathematician that has been coding for more than 10 years.
+I did my debut as programmer in a company in 2018 and I worked for 3
+years using Haskell as the main language!
 
-Vivamus eget mauris sit amet nulla laoreet lobortis. Nulla in diam elementum
-risus convallis commodo. Cras vehicula varius dui vitae facilisis. Proin
-elementum libero eget leo aliquet quis euismod orci vestibulum. Duis rhoncus
-lorem consequat tellus vestibulum aliquam. Quisque orci orci, malesuada porta
-blandit et, interdum nec magna.
+I have a master degree on math, with primary focus on proofs.
+
+My personal interest are the programming languages (their tools,
+theory and implementation).
+
+I'm developing a programming language named `octizys`

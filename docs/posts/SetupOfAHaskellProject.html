@@ -40,7 +40,8 @@ project using the <strong>cabal</strong> tool.</p>
 it</a> in multiple ways).</p>
 <h2 id="cabal-init.">Cabal init.</h2>
 <p>Our first step is to create a new folder <code>AdventOfCode</code>, enter inside
-it and run <code>cabal init</code> with some options.</p>
+it and run <code>cabal init</code> with some options.
+(We assume you are using *nix operating system or wls in windows)</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> AdventOfCode</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> AdventOfCode</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">cabal</span> init <span class="at">--libandexe</span> <span class="at">--tests</span></span></code></pre></div>
@@ -186,8 +187,7 @@ they use your library unless they want to run your library tests.</p>
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="ex">└──</span> src</span>
 <span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="ex">└──</span> Problem1.hs</span></code></pre></div>
 <p>And make the changes inside the files to reflect this change.</p>
-<p>First we create the <strong>tests</strong> folder and move the <strong>MyLibTest.hs</strong> to it.
-(We assume you are using *nix operating system or wls)</p>
+<p>First we create the <strong>tests</strong> folder and move the <strong>MyLibTest.hs</strong> to it.</p>
 <p>At the root of the project</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> tests</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mv</span> MyLibTest.hs  tests/Main.hs</span></code></pre></div>

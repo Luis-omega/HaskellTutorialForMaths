@@ -18,6 +18,7 @@ Cabal init.
 
 Our first step is to create a new folder `AdventOfCode`, enter inside
 it and run `cabal init` with some options.
+(We assume you are using *nix operating system or wls in windows)
 
 ```bash
 mkdir AdventOfCode
@@ -209,7 +210,6 @@ To:
 And make the changes inside the files to reflect this change.
 
 First we create the **tests** folder and move the **MyLibTest.hs** to it.
-(We assume you are using *nix operating system or wls)
 
 At the root of the project
 
