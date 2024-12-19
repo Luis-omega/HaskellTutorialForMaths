@@ -2,17 +2,17 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>My Hakyll Blog - Recursive types and being lazy.</title>
+        <title>A Blog - Recursive types and being lazy.</title>
         <link rel="stylesheet" type="text/css" href="../css/default.css" />
         <link rel="stylesheet" href="../css/syntax.css" />
     </head>
     <body>
-      <div style="background:black">ASDF ASDF </div>
+      <div style="background:black">A</div>
         <div id="header">
             <div id="logo" style="max-width:30%; font-size:1.3em">
-                <a href="../">Haskell tutorial for mathematicians</a>
+                <a href="../">Haskell tutorials</a>
             </div>
             <div id="navigation">
                 <a href="../">Home</a>
@@ -32,17 +32,23 @@
     
 </div>
 
-<p>Past time we were almost there, we have a way to make types, a way to know how types where made and a way to write functions about them. If you think on it, we are at a point like ZF where we can make sets from other sets, but we still lack the infinity axiom. We don’t have the same structures (union, intersection, cartesian product), but we have a set of tools that allows us to talk about types, functions, functions composition, types composition.</p>
+<p>Past time we were almost there, we have a way to make types, a way to know how types where made and a way to write functions about them.
+If you think on it, we are at a point like ZF where we can make sets from other sets, but we still lack the infinity axiom.
+We don’t have the same structures (union, intersection, cartesian product), but we have a set of tools that allows us to talk about types, functions, functions composition, types composition.</p>
 <p>As with ZF, we would be motivated to have infinite elements to build at least the <span class="math inline">\(\mathbb{N}\)</span> (naturals).</p>
 <p>If you remember, one could proceed by Peano’s axioms or by inductive sets. Let’s use Peano’s way.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">Nat</span> <span class="ot">=</span> </span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>        <span class="dt">Z</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>      <span class="op">|</span> <span class="dt">S</span> <span class="dt">Nat</span></span></code></pre></div>
 <p>Let’s read this as functions and types again</p>
-<p>Nat::Type Z:: Nat S:: Nat -&gt; Nat</p>
+<p>Nat::Type
+Z:: Nat
+S:: Nat -&gt; Nat</p>
 <p>So, we’re claiming :</p>
 <p><span class="math inline">\(\exists Nat, \quad \exists Z:Nat, \quad \exists S:Nat-&gt;Nat\)</span></p>
-<p>And by the nature of Haskell we know that if <span class="math inline">\(n:Nat\)</span> then <span class="math inline">\((S\, n):Nat\)</span> and <span class="math inline">\(\forall n:Nat,\,\, n \neq S\, n\)</span> and <span class="math inline">\(\forall n:Nat, \,\, S n \neq Z\)</span>. In fact we are only lacking the <em>There is and equality over Nat</em>, to get a thing that follows the Peano’s axioms, if we ignore the fact that computer can’t store and infinite collection of numbers, but just as us, can encode the expression of something infinite in a finite mean.</p>
+<p>And by the nature of Haskell we know that if <span class="math inline">\(n:Nat\)</span> then <span class="math inline">\((S\, n):Nat\)</span> and <span class="math inline">\(\forall n:Nat,\,\, n \neq S\, n\)</span> and <span class="math inline">\(\forall n:Nat, \,\, S n \neq Z\)</span>.
+In fact we are only lacking the <em>There is and equality over Nat</em>, to get a thing that follows the Peano’s axioms, if we ignore the fact that
+computer can’t store and infinite collection of numbers, but just as us, can encode the expression of something infinite in a finite mean.</p>
 <p>From a math point of view, we need a little more to be convinced from this definition, allow me to show the equation :</p>
 <p><span class="math inline">\(X = X + (X-&gt;X)\)</span></p>
 <p>Here <strong>X</strong> is a type and <strong>a + b</strong> represent the sum type for <strong>a</strong> and <strong>b</strong> types. This equation represents the Haskell <strong>data</strong> definition for <strong>Nat</strong>. We could slightly modify to make a function.</p>
@@ -70,7 +76,8 @@
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>add <span class="dt">Z</span> m <span class="ot">=</span> m</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>add (<span class="dt">S</span> n) m <span class="ot">=</span> <span class="dt">S</span> (add n m)</span></code></pre></div>
 <p>With those functions as base, we could talk about a particular thing about Haskell called <strong>laziness</strong>.</p>
-<p>Until now, we haven’t talk about a crucial thing, How Haskell computes something like <strong>Add (S Z) Z</strong>? We have relied in our math intuition to understand how this could be accomplished but this need some care, since math intuition about this isn’t equal to Haskell evaluation way.</p>
+<p>Until now, we haven’t talk about a crucial thing, How Haskell computes something like <strong>Add (S Z) Z</strong>?
+We have relied in our math intuition to understand how this could be accomplished but this need some care, since math intuition about this isn’t equal to Haskell evaluation way.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode haskell literate"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">Show</span> <span class="dt">Nat</span> <span class="kw">where</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">show</span> <span class="dt">Z</span> <span class="ot">=</span> <span class="st">&quot;Z&quot;</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">show</span> (<span class="dt">S</span> n) <span class="ot">=</span> <span class="st">&quot;(S &quot;</span><span class="op">++</span><span class="fu">show</span> n<span class="op">++</span><span class="st">&quot;)&quot;</span></span>

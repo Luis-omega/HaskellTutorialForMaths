@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>A Blog - Setting up a simple Haskell project using Cabal.</title>
+        <link rel="stylesheet" type="text/css" href="../css/default.css" />
+        <link rel="stylesheet" href="../css/syntax.css" />
+    </head>
+    <body>
+      <div style="background:black">A</div>
+        <div id="header">
+            <div id="logo" style="max-width:30%; font-size:1.3em">
+                <a href="../">Haskell tutorials</a>
+            </div>
+            <div id="navigation">
+                <a href="../">Home</a>
+                <a href="../about.html">About</a>
+                <a href="../contact.html">Contact</a>
+                <a href="../archive.html">Archive</a>
+            </div>
+        </div>
+
+        <div id="content">
+            <h1>Setting up a simple Haskell project using Cabal.</h1>
+
+            <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<div class="info">
+    Posted on November 17, 2024
+    
+</div>
+
+<p>A mini tutorial about how to use cabal to configure a new project.</p>
+<p>I’m going to write a series solving the <a href="https://adventofcode.com/2024">Advent Of Code 2024</a>
+problems and this blog entry will focus on how to configure a simple
+project using the <strong>cabal</strong> tool.</p>
+<p>Assuming you already have <strong>cabal</strong> available to you (otherwise you can <a href="https://www.haskell.org/cabal/">install
+it</a> in multiple ways).</p>
+<h2 id="cabal-init.">Cabal init.</h2>
+<p>Our first step is to create a new folder <code>AdventOfCode</code>, enter inside
+it and run <code>cabal init</code> with some options.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> AdventOfCode</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> AdventOfCode</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">cabal</span> init <span class="at">--libandexe</span> <span class="at">--tests</span></span></code></pre></div>
+<p>In this case we choose the options <code>--libandexe --tests</code>, this mean that
+cabal would generate a project structure with tree things in mind:</p>
+<ul>
+<li>Library code: This is code that we can distribute as a library and
+is not intended to directly generate an executable that you can run.
+This is the code that is checked when you run <code>cabal build</code></li>
+<li>Executable code: This is code that can use multiple libraries and
+cabal would construct an executable for it.
+The executable can be run using <code>cabal run</code>, however note that
+if you configure multiple executables on the cabal file (yes you can)
+then you need the specify the name of the executable to run.</li>
+<li>Test code: Code that won’t be included as part of the library or
+the executable and is used to run test on the code.
+This can be executed with <code>cabal test</code>.</li>
+</ul>
+<p>This is the tree structure that the above command would generate:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">.</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">├──</span> AdventOfCode.cabal</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">├──</span> app</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="ex">│  </span> └── Main.hs</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="ex">├──</span> CHANGELOG.md</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="ex">├──</span> MyLibTest.hs</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="ex">└──</span> src</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="ex">└──</span> MyLib.hs</span></code></pre></div>
+<p>The file <code>AdventOfCode.cabal</code> contains the cabal configuration for the project.
+Is inside this file were you must add more files to the library/executable/tests
+for cabal and ghc to include them at compilation time.</p>
+<p>With this you should be able to run the tree commands:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cabal</span> build</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">cabal</span> run</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">cabal</span> test</span></code></pre></div>
+<p>They shouldn’t do much, but they also shouldn’t fail. If there is a error at
+this point you need to solve it before advancing further!</p>
+<p>If you open the file <code>AdventOfCode.cabal</code> after the initial section with
+the project information, you can see a section like this:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>library</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    exposed<span class="op">-</span>modules<span class="op">:</span>  <span class="dt">MyLib</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- Modules included in this library but not exported.</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- other-modules:</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- LANGUAGE extensions used by modules in this package.</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- other-extensions:</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    build<span class="op">-</span>depends<span class="op">:</span>    base <span class="op">^&gt;=</span><span class="fl">4.14</span><span class="op">.</span><span class="fl">3.0</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    hs<span class="op">-</span>source<span class="op">-</span>dirs<span class="op">:</span>   src</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    default<span class="op">-</span>language<span class="op">:</span> <span class="dt">Haskell2010</span></span></code></pre></div>
+<p>You can refer to the <a href="https://cabal.readthedocs.io/en/stable/cabal-package-description-file.html">cabal documentation</a>
+for information about those and more fields, but let’s have an overview of them:</p>
+<ul>
+<li>The <strong>exposed-modules</strong> field are the modules (files as every file is a module)
+that other people can import when they add our library as a dependence.
+In this case cabal automatically created a <code>src/Mylib.hs</code> file and added it
+as the only export for now.</li>
+<li>The <strong>other-modules</strong> field is for modules that are part of the library
+but that other people can’t use when they import the library. This mean
+that only the code inside the library can use them. This would be useful
+if you want to hide the details of how you implement something and only
+expose an interface in other modules of the library.
+To use this field you need to delete the <strong>–</strong> before it (i.e. uncomment the
+line).</li>
+<li>The <strong>build-depends</strong> is where you would put other libraries that your library
+depend on. You can add local libraries (i.e. libraries that you have in
+other parts of your computer) or libraries from some source of libraries.
+The default source of libraries for cabal is <a href="https://hackage.haskell.org/">Hackage</a>).
+In this case we have the <strong>base</strong> library added as a dependence, it has
+a lot of basic types and functions that you usually want access while you
+are learning (like Int, List, Tuple, Maybe, IO, etc).
+The numbers after the name base are for cabal to choose a version of base
+that can work with our code. I’m not gonna lie, this is going to be a
+source of headaches for you if you have lots of dependencies in the future
+in any project. As such, we are not going to talk more about this part
+in this tutorial (sorry).</li>
+<li>The <strong>hs-source-dirs</strong> is a path to the folder that contains all the code
+of our library. If you want to add a new module to <strong>exposed-modules</strong>
+you need to put the file under this folder.</li>
+</ul>
+<p>Then in the next section you should see something like:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>executable <span class="dt">AdventOfCode</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    main<span class="op">-</span>is<span class="op">:</span>          Main.hs</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- Modules included in this executable, other than Main.</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- other-modules:</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- LANGUAGE extensions used by modules in this package.</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- other-extensions:</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    build<span class="op">-</span>depends<span class="op">:</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>        base <span class="op">^&gt;=</span><span class="fl">4.14</span><span class="op">.</span><span class="fl">3.0</span>,</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>        <span class="dt">AdventOfCode</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    hs<span class="op">-</span>source<span class="op">-</span>dirs<span class="op">:</span>   app</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    default<span class="op">-</span>language<span class="op">:</span> <span class="dt">Haskell2010</span></span></code></pre></div>
+<p>This section defines a executable whose name is <strong>AdventOfCode</strong>.
+It means that we can use <code>cabal run AdventOfCode</code> to run this executable.</p>
+<p>We only see a new field here:</p>
+<p>The <strong>main-is</strong> field is to specify the name of the module that contains a
+<strong>main</strong> function. This <strong>main</strong> function is the function that we are going
+to run when we do <code>cabal run</code>. It is an error if it’s not present. In
+our case it is setted to <strong>Main.hs</strong>, as we also have <strong>hs-source-dirs</strong>
+setted to <strong>app</strong>, this means that cabal expects to see the <strong>Main.hs</strong>
+file in the path <strong>app/Main.hs</strong>.</p>
+<p>You may also notice the that <strong>build-depends</strong> has <strong>base</strong> (as before)
+and <strong>AdventOfCode</strong>. The meaning of this is that our library
+defined above is a dependence of our executable. This is, the
+executable can see all the exported modules of our library and
+use all the exported functions and types from it.</p>
+<p>Finally, the test section.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>test<span class="op">-</span>suite <span class="dt">AdventOfCode</span><span class="op">-</span>test</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    default<span class="op">-</span>language<span class="op">:</span> <span class="dt">Haskell2010</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">type</span><span class="op">:</span>             exitcode<span class="op">-</span>stdio<span class="op">-</span><span class="fl">1.0</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- Directories containing source files.</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- hs-source-dirs:</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    main<span class="op">-</span>is<span class="op">:</span>          MyLibTest.hs</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    build<span class="op">-</span>depends<span class="op">:</span>    base <span class="op">^&gt;=</span><span class="fl">4.14</span><span class="op">.</span><span class="fl">3.0</span></span></code></pre></div>
+<p>In this case you should notice that it didn’t specify a <strong>hs-source-dirs</strong>,
+but it has a <strong>main-is</strong> and that cabal generated a file <strong>MyLibTest.hs</strong>
+at the root of the project. Usually you want to set the <strong>hs-source-dirs</strong>
+to something like <strong>tests</strong> and put the main file inside this folder.</p>
+<p>The <strong>build-depends</strong> is for adding new libraries that your original library
+and executable may not need but that can simplify your life to write tests!
+This means that the users of this library won’t need those libraries whenever
+they use your library unless they want to run your library tests.</p>
+<h2 id="modifying-the-default-configuration">Modifying the default configuration</h2>
+<p>We are going to change the default structure of our project from:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">.</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">├──</span> AdventOfCode.cabal</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ex">├──</span> app</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="ex">│  </span> └── Main.hs</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="ex">├──</span> CHANGELOG.md</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="ex">├──</span> MyLibTest.hs</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="ex">└──</span> src</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="ex">└──</span> MyLib.hs</span></code></pre></div>
+<p>To:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="bu">.</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">├──</span> AdventOfCode.cabal</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ex">├──</span> app</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="ex">│  </span> └── Main.hs</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="ex">├──</span> CHANGELOG.md</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="ex">├──</span> tests/Main.hs</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="ex">└──</span> src</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="ex">└──</span> Problem1.hs</span></code></pre></div>
+<p>And make the changes inside the files to reflect this change.</p>
+<p>First we create the <strong>tests</strong> folder and move the <strong>MyLibTest.hs</strong> to it.
+(We assume you are using *nix operating system or wls)</p>
+<p>At the root of the project</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> tests</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mv</span> MyLibTest.hs  tests/Main.hs</span></code></pre></div>
+<p>Then we change the name of <strong>src/Mylib.hs</strong> to <strong>src/Problem1.hs</strong></p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mv</span> src/MyLib.hs  src/Problem1.hs</span></code></pre></div>
+<p>Now to tell cabal that we want those changes we need to update the fields.</p>
+<p>The <strong>library</strong> section has to change the <strong>exposed-modules</strong> like this:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>    exposed<span class="op">-</span>modules<span class="op">:</span>  <span class="dt">Problem1</span></span></code></pre></div>
+<p>The <strong>test</strong> section needs to uncomment the <strong>hs-source-dirs</strong> and the section
+like:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>    hs<span class="op">-</span>source<span class="op">-</span>dirs<span class="op">:</span>  tests</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    main<span class="op">-</span>is<span class="op">:</span> <span class="dt">Main</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    build<span class="op">-</span>depends<span class="op">:</span>    base <span class="op">^&gt;=</span><span class="fl">4.14</span><span class="op">.</span><span class="fl">3.0</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    ,<span class="dt">AdventOfCode</span></span></code></pre></div>
+<p>Now if you try any of the commands of cabal (<strong>run</strong>/<strong>build</strong>/<strong>test</strong>)
+you would find that all of them fail!</p>
+<p>For example <code>cabal build</code> gave me:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Build</span> profile: <span class="at">-w</span> ghc-8.10.7 <span class="at">-O1</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="ex">In</span> order, the following will be built <span class="er">(</span><span class="ex">use</span> <span class="at">-v</span> for more details<span class="kw">)</span><span class="bu">:</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a> <span class="ex">-</span> AdventOfCode-0.1.0.0 <span class="er">(</span><span class="ex">lib</span><span class="kw">)</span> <span class="kw">(</span><span class="ex">configuration</span> changed<span class="kw">)</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a> <span class="ex">-</span> AdventOfCode-0.1.0.0 <span class="er">(</span><span class="ex">exe:AdventOfCode</span><span class="kw">)</span> <span class="kw">(</span><span class="ex">configuration</span> changed<span class="kw">)</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="ex">Configuring</span> library for AdventOfCode-0.1.0.0..</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="ex">Preprocessing</span> library for AdventOfCode-0.1.0.0..</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="ex">Building</span> library for AdventOfCode-0.1.0.0..</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="ex">src/Problem1.hs:1:8:</span> error:</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    <span class="ex">File</span> name does not match module name:</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    <span class="ex">Saw:</span> ‘MyLib’</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    <span class="ex">Expected:</span> ‘Problem1’</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>  <span class="kw">|</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="ex">1</span> <span class="kw">|</span> <span class="ex">module</span> MyLib <span class="er">(</span><span class="ex">someFunc</span><span class="kw">)</span> <span class="ex">where</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>  <span class="kw">|</span>        <span class="ex">^^^^^</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="ex">cabal:</span> Failed to build AdventOfCode-0.1.0.0 <span class="er">(</span><span class="fu">which</span> is required by</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a><span class="ex">exe:AdventOfCode</span> from AdventOfCode-0.1.0.0<span class="kw">)</span><span class="bu">.</span></span></code></pre></div>
+<p>We need to go to <strong>src/Problem1.hs</strong> and change the first line from:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> <span class="dt">MyLib</span> (someFunc) <span class="kw">where</span></span></code></pre></div>
+<p>To:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> <span class="dt">Problem1</span> (someFunc) <span class="kw">where</span></span></code></pre></div>
+<p>Every file in Haskell is a module and the module we are declaring
+in this line must match the name of the file (or the path, more on that later)</p>
+<p>If you try again the error changes to</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>app<span class="op">/</span>Main.hs<span class="op">:</span><span class="dv">3</span><span class="op">:</span><span class="dv">1</span><span class="op">:</span> <span class="fu">error</span><span class="op">:</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Could</span> <span class="fu">not</span> find <span class="kw">module</span> ‘<span class="dt">MyLib</span>’</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Use</span> <span class="op">-</span>v (<span class="fu">or</span> <span class="ot">`:set -v`</span> <span class="kw">in</span> ghci) to see a list <span class="kw">of</span> the files searched for<span class="op">.</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">|</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="dv">3</span> <span class="op">|</span> <span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">MyLib</span> (someFunc)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="op">|</span> <span class="op">^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span></span></code></pre></div>
+<p>This is because the <strong>app/Main.hs</strong> file is importing the <code>someFunc</code>
+function from the old file <strong>src/MyLib</strong>, we need to change this.</p>
+<p>If you open <strong>app/Main.hs</strong> it may look like</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> <span class="dt">Main</span> <span class="kw">where</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">MyLib</span> (someFunc)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="ot">main ::</span> <span class="dt">IO</span> ()</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>main <span class="ot">=</span> <span class="kw">do</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  Mylib.someFunc</span></code></pre></div>
+<p>We need to replace the <code>MyLib</code> for <code>Problem1</code> in every place we
+find it, then we are going to see something like this:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> <span class="dt">Main</span> <span class="kw">where</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Problem1</span> (someFunc)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="ot">main ::</span> <span class="dt">IO</span> ()</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>main <span class="ot">=</span> <span class="kw">do</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  Problem1.someFunc</span></code></pre></div>
+<p>After this there shouldn’t be more problems using <strong>cabal build</strong> or <strong>cabal
+run</strong>. However, you still need to change the occurrences of <code>Mylib</code> inside
+<strong>tests/Main.hs</strong> after that you shouldn’t have issues with
+<strong>cabal test</strong>.</p>
+<h2 id="the-problems-module-structure.">The problem’s module structure.</h2>
+<p>The problems of advent of code always have two parts, to reflect this
+every problem we solve will have two functions: <code>solve1</code> and <code>solve2</code>.
+The <code>solve1</code> function would solve the original problem and the
+<code>solve2</code> the modified one unblocked after solving the first problem.</p>
+<p>However during the series we want to have two additional functions:
+<code>solve1_2</code> and <code>solve2_2</code>. They also correspond to solutions of the first and
+second part of a problem, but they are intended to be for experimentation
+in the blogs.</p>
+<p>If <code>solve1</code> used a very naive way to do something then <code>solve1_2</code> may use
+some advance technique that we are going to explore. But usually the
+functions suffixed with <code>_2</code> will be used to explore how we should
+write the code assuming that we are in a big project with a team. This
+way you can begin to learn how to write code that others can read at work.</p>
+<p>With this said we need to modify <strong>src/Problem1.hs</strong> like this:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> <span class="dt">Problem1</span>(solve1,solve1_2,solve2,solve2_2) <span class="kw">where</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="ot">solve1 ::</span> <span class="dt">IO</span> ()</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>solve1 <span class="ot">=</span> <span class="fu">undefined</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="ot">solve1_2 ::</span> <span class="dt">IO</span> ()</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>solve1_2 <span class="ot">=</span> <span class="fu">undefined</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="ot">solve2_1 ::</span> <span class="dt">IO</span> ()</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>solve2_1 <span class="ot">=</span> <span class="fu">undefined</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a><span class="ot">solve2_2 ::</span> <span class="dt">IO</span> ()</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>solve2_2 <span class="ot">=</span> <span class="fu">undefined</span></span></code></pre></div>
+<p>Then under <strong>app/Main.hs</strong> we need to change the file like</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> <span class="dt">Main</span> <span class="kw">where</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Problem1</span> (solve1,solve1_2,solve2_1,solve2_2) <span class="kw">qualified</span> <span class="kw">as</span> <span class="dt">P1</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="ot">main ::</span> <span class="dt">IO</span> ()</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>main <span class="ot">=</span> <span class="kw">do</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  P1.solve1</span></code></pre></div>
+<p>Every time you want to run a particular solver, you only need to change the</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>main <span class="ot">=</span> <span class="kw">do</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  P1.solve1</span></code></pre></div>
+<p>To the appropriate solver.</p>
+<p>Every time you want to add a new problem you need to crate a
+new <strong>src/ProblemN.hl</strong> with the same functions and
+add the import to <strong>app/Main.hs</strong>.</p>
+<p>And that’s it! We are ready to began to solve the advent of code
+problems!</p>
+<p>Note that we didn’t update the <strong>tests/Main.hs</strong> file, this mean that our test
+are broken, but we are not going to use them anyway, we are
+going to keep them broken unless we need them later in the series. We
+only included them to give a complete guide on how to configure a
+project!</p>
+<p>From here you can:</p>
+<ul>
+<li>Read other fields that you can use in your cabal file in the <a href="https://cabal.readthedocs.io/en/stable/cabal-package-description-file.html">cabal documentation</a>.</li>
+<li>Experiment adding dependencies to your projects (like the <code>containers</code> or
+<code>mtl</code> libraries). You eventually will hit a wall if you do this, but you
+need to do it in order to learn how to jump this wall (and then hit it
+again in other ways with more advanced tools…).</li>
+<li>Attempt to solve the AOC problems (we did all this for that reason after all).</li>
+<li>Use this as a template for new projects (well you can also have project
+templates that cabal can use to fill things in the <code>init</code> face, but I didn’t
+mean this!).</li>
+</ul>
+
+        </div>
+        <div id="footer">
+            Site proudly generated by
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+        </div>
+    </body>
+</html>

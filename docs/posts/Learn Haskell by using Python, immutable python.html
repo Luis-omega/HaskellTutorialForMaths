@@ -2,17 +2,17 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>My Hakyll Blog - Learn Haskell by using Python, immutable python</title>
+        <title>A Blog - Learn Haskell by using Python, immutable python</title>
         <link rel="stylesheet" type="text/css" href="../css/default.css" />
         <link rel="stylesheet" href="../css/syntax.css" />
     </head>
     <body>
-      <div style="background:black">ASDF ASDF </div>
+      <div style="background:black">A</div>
         <div id="header">
             <div id="logo" style="max-width:30%; font-size:1.3em">
-                <a href="../">Haskell tutorial for mathematicians</a>
+                <a href="../">Haskell tutorials</a>
             </div>
             <div id="navigation">
                 <a href="../">Home</a>
@@ -32,26 +32,51 @@
     
 </div>
 
-<p>This series intent to be a way to learn the basics about Haskell by programming on python in a restricted way, so we could understand why some decisions on Haskell were made (or why them makes sense).</p>
-<p>At the end of this series we would have implemented in python a parser combinator library that is pretty inefficient for python code but that resembles the <strong>parsec</strong> library (or maybe the <strong>megaparserc</strong> one).</p>
-<p>The prerequisite is then to have python skills to understand the presented material and don’t be scared of recursion code. We won’t teach Haskell syntax here unless we need it, but in general all needed concept are explained.</p>
+<p>This series intent to be a way to learn the basics about Haskell by
+programming on python in a restricted way, so we could understand
+why some decisions on Haskell were made (or why them makes sense).</p>
+<p>At the end of this series we would have implemented in python
+a parser combinator library that is pretty inefficient for python code
+but that resembles the <strong>parsec</strong> library (or maybe the <strong>megaparserc</strong> one).</p>
+<p>The prerequisite is then to have python skills to understand
+the presented material and don’t be scared of recursion code.
+We won’t teach Haskell syntax here unless we need it, but in
+general all needed concept are explained.</p>
 <h1 id="immutable-things">Immutable things</h1>
-<p>So, first thing of all, we begin by forcing ourselves to work on immutable subset of python. As you could know, things in Haskell are immutable by defect just as python <strong>str</strong> and <strong>int</strong> are immutable. This means that a lot of thing done here area already done whenever you use python <strong>str</strong> or <strong>int</strong>.</p>
-<p>To refresh ourselves consider the code for add a <strong>int</strong> inside <strong>x</strong> to other one in <strong>y</strong> and store in <strong>x</strong></p>
+<p>So, first thing of all, we begin by forcing ourselves to work on immutable
+subset of python. As you could know, things in Haskell are immutable by
+defect just as python <strong>str</strong> and <strong>int</strong> are immutable. This means
+that a lot of thing done here area already done whenever you use
+python <strong>str</strong> or <strong>int</strong>.</p>
+<p>To refresh ourselves consider the code for add a <strong>int</strong> inside <strong>x</strong> to
+other one in <strong>y</strong> and store in <strong>x</strong></p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> x <span class="op">+</span> y</span></code></pre></div>
-<p>When we do <strong>x=x+y</strong> the value of <strong>y</strong> and <strong>x</strong> are find by the interpreter then added and finally the value pointed by <strong>x</strong> is updated for a new value.</p>
-<p>But this also means that the numbers wasn’t changed, what change is the value pointed by <strong>x</strong> not the number themself.</p>
+<p>When we do <strong>x=x+y</strong> the value of <strong>y</strong> and <strong>x</strong> are find by the interpreter
+then added and finally the value pointed by <strong>x</strong> is updated for a new value.</p>
+<p>But this also means that the numbers wasn’t changed, what change is the
+value pointed by <strong>x</strong> not the number themself.</p>
 <p>If numbers where able to change (and supported by the syntax), we could perhaps write something like</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="op">=</span><span class="dv">2</span><span class="op">+</span><span class="dv">2</span></span></code></pre></div>
-<p>And then have <strong>1==4</strong> as <strong>True</strong>. Of course allowing this could be a source of bugs and other things as this behaviour is unexpected by most programmers. So, making python <strong>int</strong> immutable is a great thing.</p>
-<p>In the Haskell world, all changes to variables is by defect forbidden (you could still write mutable code) and discouraged. This means that previous code :</p>
+<p>And then have <strong>1==4</strong> as <strong>True</strong>. Of course allowing this could be a source of bugs and
+other things as this behaviour is unexpected by most programmers. So, making
+python <strong>int</strong> immutable is a great thing.</p>
+<p>In the Haskell world, all changes to variables is by defect forbidden (you could
+still write mutable code) and discouraged. This means that previous code :</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> x <span class="op">+</span> y</span></code></pre></div>
 <p>Would be rejected by Haskell as we try to change the value pointed by <strong>x</strong>.</p>
 <p>So, our first restriction would be that, we won’t use code that change variables.</p>
-<p>This means that a lot of things in python would stop working for us, and as that we would need to adapt ourselves to this new python. Of course there are some things that we won’t be able to fix, like garbage collection. As we won’t change variables, all previous stored values by global context would be still valid in the remain of the programs, that means that all global declared things won’t be garbage collected. This is a major problem if we stick to python but it won’t be if we just use it for tutorial. So, the advice is <strong>wont use this tutorial code in your python code</strong>, the code is only illustrative and is a very bad idea to follow the mutability idea out of tutorial except for specific task.</p>
+<p>This means that a lot of things in python would stop working for us, and as that
+we would need to adapt ourselves to this new python. Of course there are some
+things that we won’t be able to fix, like garbage collection. As we won’t
+change variables, all previous stored values by global context would be still valid
+in the remain of the programs, that means that all global declared things won’t be
+garbage collected. This is a major problem if we stick to python but it won’t be
+if we just use it for tutorial. So, the advice is <strong>wont use this tutorial
+code in your python code</strong>, the code is only illustrative and is a very bad idea
+to follow the mutability idea out of tutorial except for specific task.</p>
 <h1 id="iteration">Iteration</h1>
 <p>First thing we would fix is iteration.</p>
 <p>So, how iteration is done in python?</p>
@@ -61,13 +86,17 @@
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ind <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>,<span class="dv">101</span>)</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  acc<span class="op">+=</span>ind </span></code></pre></div>
 <p>This code breaks our <strong>immutability</strong> rule in two places.</p>
-<p>Most notorious one is the mutation of <strong>acc</strong> to store the accumulation of numbers. If we remove them</p>
+<p>Most notorious one is the mutation of <strong>acc</strong> to store
+the accumulation of numbers. If we remove them</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ind <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>,<span class="dv">101</span>)</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">continue</span></span></code></pre></div>
-<p>We still face one mutation less obvious, <strong>ind</strong> is taking values on <strong>range(1,101)</strong> !.</p>
+<p>We still face one mutation less obvious, <strong>ind</strong> is taking values on
+<strong>range(1,101)</strong> !.</p>
 <p>So, how could we make and equivalent loop without mutation?</p>
-<p>The answer is <strong>recursive calls</strong>. Doing recursion in python is bad idea as python isn’t optimized for that (and imposes a ridiculous constrain on recursion deep) but is what we would need to gain again iteration power.</p>
+<p>The answer is <strong>recursive calls</strong>. Doing recursion in python is bad idea
+as python isn’t optimized for that (and imposes a ridiculous constrain on recursion deep)
+but is what we would need to gain again iteration power.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> useless_loop(previous_loop_value:<span class="bu">int</span>)<span class="op">-&gt;</span><span class="va">None</span>:</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> previous_loop_value <span class="op">&lt;</span><span class="dv">101</span>:</span>
@@ -79,8 +108,10 @@
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  useless_loop(<span class="dv">1</span>)</span>
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>loop_start()</span></code></pre></div>
-<p>So this new way does (at least as we are concerned right now) the same things. Both of them take all values from 1 to 100 and do nothing with that.</p>
-<p>Now if we want to write the original loop summing the first 100 positive integers, we could rewrite it like :</p>
+<p>So this new way does (at least as we are concerned right now) the same things.
+Both of them take all values from 1 to 100 and do nothing with that.</p>
+<p>Now if we want to write the original loop summing the first 100 positive integers,
+we could rewrite it like :</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> loop_body(previous_loop_value:<span class="bu">int</span>, acc:<span class="bu">int</span>)<span class="op">-&gt;</span><span class="va">None</span>:</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> previous_loop_value <span class="op">&lt;</span><span class="dv">101</span>:</span>
@@ -93,7 +124,8 @@
 <span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> loop_body(<span class="dv">1</span>)</span>
 <span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>loop_start()</span></code></pre></div>
-<p>And as the good programmer you are, you probably has think of modify it to a more general function acting a little like the python <strong>range</strong> function.</p>
+<p>And as the good programmer you are, you probably has think of modify it to a
+more general function acting a little like the python <strong>range</strong> function.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> range_body(</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  ,step:<span class="bu">int</span></span>
@@ -125,8 +157,17 @@
 <span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>new_range(<span class="dv">0</span>,<span class="dv">101</span>,<span class="dv">1</span>, add_two, <span class="dv">0</span>)</span></code></pre></div>
 <p>There’s a lot of things happening here</p>
 <ul>
-<li><p>I’m using python type annotation syntax. Right now there’s a lot of old python code that won’t use them and maybe you haven’t see them before. In Haskell we would need to put type annotations from time to time, but we can discard most of them if we want. Is (at least to me) a pretty bad practice to not put at least the annotation to top level functions. So, I will put type annotations in all examples. If you want to know about them you can consult <a href="https://docs.python.org/3/library/typing.html">here</a>.</p></li>
-<li><p>The annotation for range_body is wrong. Is wrong as we could diverge the computation by calling it with a negative value for step. So, this is a consequence of the fact that our <strong>new_range</strong> function is bad implemented or at least it has some corner cases that the original <strong>range</strong> covers and ours won’t cover. It’s an exercise to fix it!</p></li>
+<li><p>I’m using python type annotation syntax. Right now there’s a lot of old
+python code that won’t use them and maybe you haven’t see them before.
+In Haskell we would need to put type annotations from time to time, but
+we can discard most of them if we want. Is (at least to me) a pretty
+bad practice to not put at least the annotation to top level functions.
+So, I will put type annotations in all examples. If you want
+to know about them you can consult <a href="https://docs.python.org/3/library/typing.html">here</a>.</p></li>
+<li><p>The annotation for range_body is wrong. Is wrong as we could diverge the computation
+by calling it with a negative value for step. So, this is a consequence of the fact that
+our <strong>new_range</strong> function is bad implemented or at least it has some corner cases
+that the original <strong>range</strong> covers and ours won’t cover. It’s an exercise to fix it!</p></li>
 </ul>
 <p>For clarity let’s rewrite all of this as a regular mutable loop:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a></span>
@@ -137,15 +178,22 @@
 <span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> acc </span>
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>new_range(<span class="dv">0</span>,<span class="dv">101</span>,<span class="dv">1</span>, add_two)</span></code></pre></div>
-<p>So, body_function is what we usually put inside a loop and it depends on our previous value of iteration variable and the previous value computed by the loop.</p>
-<p>Then we have two patterns mixed here, the one we did first to get a way to iterate over the values between <strong>start</strong> and <strong>stop</strong> but doing nothing with it, and the way to use the value to get another one, reflected here by the <strong>body_function</strong>.</p>
-<p>In Haskell both of them are commonly separated and some people call them <strong>data generation</strong> and <strong>data consumption</strong>. Of course those therms aren’t unique to FP (functional programming) but the separation tend to be made in those.</p>
-<p>A common way to consume a value that resembles our <strong>new_range</strong> function is by using a <strong>fold</strong> function.</p>
+<p>So, body_function is what we usually put inside a loop and it depends on our previous value of
+iteration variable and the previous value computed by the loop.</p>
+<p>Then we have two patterns mixed here, the one we did first to get a way to iterate over
+the values between <strong>start</strong> and <strong>stop</strong> but doing nothing with it, and the way to
+use the value to get another one, reflected here by the <strong>body_function</strong>.</p>
+<p>In Haskell both of them are commonly separated and some people call them <strong>data generation</strong>
+and <strong>data consumption</strong>. Of course those therms aren’t unique to FP (functional programming)
+but the separation tend to be made in those.</p>
+<p>A common way to consume a value that resembles our <strong>new_range</strong> function is by using
+a <strong>fold</strong> function.</p>
 <p>In plain therms the <strong>fold</strong> function could look as</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fold(<span class="va">self</span>,transform_and_add:Callable[[b,a],a], start:b, foldableThing: t a)<span class="op">-&gt;</span>a:</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">pass</span></span></code></pre></div>
-<p>Here <strong>t a </strong> could be thinking as <strong>List a</strong>, so in that particular case we could implement fold as</p>
+<p>Here <strong>t a </strong> could be thinking as <strong>List a</strong>, so in that particular case we could
+implement fold as</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fold(<span class="va">self</span>,transform_and_add:Callable[[b,a],b], start:b, foldableThing: List a)<span class="op">-&gt;</span>b:</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    acc <span class="op">=</span> start </span>
@@ -153,26 +201,35 @@
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>      acc <span class="op">=</span> transform_and_add(i,acc) </span>
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> acc </span></code></pre></div>
 <p>So <strong>fold</strong> is a way to resume some structure using a function.</p>
-<p>Before we could translate this example to our restricted python subset, we need to upfront the problem of representing list.</p>
+<p>Before we could translate this example to our restricted python subset,
+we need to upfront the problem of representing list.</p>
 <h1 id="list">List</h1>
-<p>The default implementation of python list is full of functions that uses the mutability of python (as almost any construction in python), so, our aim here is to build an alternative to regular python list.</p>
-<p>There are lots of ways, by example, we could proceed by using tuples, so instead of :</p>
+<p>The default implementation of python list is full of functions that
+uses the mutability of python (as almost any construction in python),
+so, our aim here is to build an alternative to regular python list.</p>
+<p>There are lots of ways, by example, we could proceed by using tuples,
+so instead of :</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>]</span></code></pre></div>
 <p>we could represent it like :</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> (<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>)</span></code></pre></div>
-<p>As python tuples are immutable and we have done the compromise of not mutate anything, we could thing of tuples as fully immutable, that is, we can’t in any form change a tuple if we stick to our compromise.</p>
-<p>But instead of follow this way I prefer for us to take a step further in Haskell (and FP) direction.</p>
+<p>As python tuples are immutable and we have done the compromise of not
+mutate anything, we could thing of tuples as fully immutable,
+that is, we can’t in any form change a tuple if we stick to our compromise.</p>
+<p>But instead of follow this way I prefer for us to take a step further in
+Haskell (and FP) direction.</p>
 <p>We begin by defining a super-class for our list type :</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> List(Generic[T]):</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">pass</span></span></code></pre></div>
-<p>Then we add two class that can construct our List, first the one that builds a empty list.</p>
+<p>Then we add two class that can construct our List,
+first the one that builds a empty list.</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Empty(List, Generic[T]):</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">pass</span></span></code></pre></div>
-<p>This still has little code, as it only allow us to build a <strong>empty</strong> list of type <strong>T</strong>. Next one allow us to store items</p>
+<p>This still has little code, as it only allow us to build a <strong>empty</strong>
+list of type <strong>T</strong>. Next one allow us to store items</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Cons(List, Generic[T]):</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  head:T</span>
@@ -181,17 +238,27 @@
 <span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, new_elem:T, old_list:List[T])<span class="op">-&gt;</span>List[T]:</span>
 <span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.head <span class="op">=</span> new_elem</span>
 <span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.tail <span class="op">=</span> old_list</span></code></pre></div>
-<p>Traditionally the function equivalent for <strong>append</strong> in python is called <strong>cons</strong>, it takes a list and a element to add to list and build a new list.</p>
+<p>Traditionally the function equivalent for <strong>append</strong> in python is called <strong>cons</strong>,
+it takes a list and a element to add to list and build a new list.</p>
 <p>You could be asking, Why encode list like this?</p>
 <p>Well in Haskell code and in most languages with sum types you could equivalently</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">List</span> t <span class="ot">=</span> </span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Empty</span> </span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">|</span> <span class="dt">Cons</span> t (<span class="dt">List</span> t) </span></code></pre></div>
-<p>And the tree elements being defined by that code has a meaning similar of those defined by our classes.</p>
-<p><strong>List</strong> is a class whose intend use is in the form of calls to <strong>isinstance</strong>, that way we could discriminate things that are <strong>List</strong> from those that aren’t. In Haskell his position means that <strong>List</strong> is a new type an that <strong>Empty</strong> and <strong>Cons</strong> are functions that could be use to construct <strong>List</strong>. So, to preserve Haskell meaning, we must add a new rule, we won’t ever instance the class <strong>List</strong> directly, we could accomplish this by some python mechanism but we would be pleased just with the convention.</p>
-<p>In this way our <strong>Empty</strong> and <strong>Cons</strong> class are the only way to get thing that could be found to be a <strong>List</strong>, just as in Haskell.</p>
-<p>A big gain that we have in Haskell is that this mechanism allow us to write something like :</p>
+<p>And the tree elements being defined by that code has a meaning similar of those
+defined by our classes.</p>
+<p><strong>List</strong> is a class whose intend use is in the form of calls to <strong>isinstance</strong>,
+that way we could discriminate things that are <strong>List</strong> from those that aren’t.
+In Haskell his position means that <strong>List</strong> is a new type an that <strong>Empty</strong>
+and <strong>Cons</strong> are functions that could be use to construct <strong>List</strong>.
+So, to preserve Haskell meaning, we must add a new rule, we won’t ever instance
+the class <strong>List</strong> directly, we could accomplish this by some python mechanism
+but we would be pleased just with the convention.</p>
+<p>In this way our <strong>Empty</strong> and <strong>Cons</strong> class are the only way to get thing
+that could be found to be a <strong>List</strong>, just as in Haskell.</p>
+<p>A big gain that we have in Haskell is that this mechanism allow us to write
+something like :</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="kw">case</span> list <span class="kw">of</span> </span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">Empty</span> <span class="ot">-&gt;</span> something1<span class="op">...</span></span>
@@ -206,14 +273,35 @@
 <span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    something2...</span>
 <span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span> :</span>
 <span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">raise</span> Unexpected(<span class="ss">f&quot;Expected list type, we got </span><span class="sc">{</span><span class="bu">type</span>(<span class="bu">list</span>)<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
-<p>Difference in size is clear, but this would be a unjust way to compare python and Haskell, as python isn’t made to write this kind of code while Haskell expect to see it in almost any function.</p>
+<p>Difference in size is clear, but this would be a unjust way to compare python and
+Haskell, as python isn’t made to write this kind of code while Haskell expect to
+see it in almost any function.</p>
 <p>Other differences:</p>
 <ul>
-<li><p>Haskell by static check of types, can determine that <strong>list</strong> in fact is expected to have type <strong>List</strong>, so, it could check if we are missing some cases of either <strong>Empty</strong> or <strong>Cons</strong> and warring us about that. In the python case, if we break our rule of only create <strong>List</strong> by using <strong>Empty</strong> and <strong>Cons</strong> our inner <strong>if</strong> could fail in multiple ways. So, as Haskell can enforce us to only use <strong>Empty</strong> and <strong>Const</strong> to make things of type <strong>List</strong>, then it could be sure that all the possible cases are those and check for us.</p></li>
-<li><p>Haskell pattern match binds to variables <strong>head</strong> and <strong>tail</strong> the components used in the creation of a <strong>List</strong>. To get this effect we need to introduce the <strong>head=list.head</strong> and <strong>tail=list.tail</strong> in our python code. Of course we can just use <strong>list.head</strong> and <strong>list.tail</strong> for it, but I wanted to be clear about this point here.</p></li>
-<li><p>As we said two times in first point, Haskell is able to check that variable <strong>list</strong> is in fact a <strong>list</strong>. In python we can’t be sure until we call <strong>isinstance</strong> but this also means that a bug in our code could make our <strong>list</strong> variable of some other type. That’s why I choose to use an exception here, as python type errors occurs at runtime.</p></li>
+<li><p>Haskell by static check of types, can determine that <strong>list</strong> in fact is
+expected to have type <strong>List</strong>, so, it could check if we are missing some
+cases of either <strong>Empty</strong> or <strong>Cons</strong> and warring us about that.
+In the python case, if we break our rule of only create <strong>List</strong> by
+using <strong>Empty</strong> and <strong>Cons</strong> our inner <strong>if</strong> could fail in multiple ways.
+So, as Haskell can enforce us to only use <strong>Empty</strong> and <strong>Const</strong>
+to make things of type <strong>List</strong>, then it could be sure that all the
+possible cases are those and check for us.</p></li>
+<li><p>Haskell pattern match binds to variables <strong>head</strong> and <strong>tail</strong> the
+components used in the creation of a <strong>List</strong>. To get this effect
+we need to introduce the <strong>head=list.head</strong> and <strong>tail=list.tail</strong>
+in our python code. Of course we can just use <strong>list.head</strong>
+and <strong>list.tail</strong> for it, but I wanted to be clear about this
+point here.</p></li>
+<li><p>As we said two times in first point, Haskell is able to check
+that variable <strong>list</strong> is in fact a <strong>list</strong>. In python we can’t be
+sure until we call <strong>isinstance</strong> but this also means that a bug
+in our code could make our <strong>list</strong> variable of some other type.
+That’s why I choose to use an exception here, as python
+type errors occurs at runtime.</p></li>
 </ul>
-<p>Other things to note is that in Haskell forgot to handle a case to build a <strong>List</strong> would raise a warring but not a exception, at least no until we try to use the part of code.</p>
+<p>Other things to note is that in Haskell forgot to handle a case to build a <strong>List</strong>
+would raise a warring but not a exception, at least no until we try to use
+the part of code.</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="kw">case</span> list <span class="kw">of</span> </span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">Cons</span> a b <span class="ot">-&gt;</span> someting<span class="op">...</span></span></code></pre></div>
@@ -233,8 +321,14 @@
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="kw">case</span> list <span class="kw">of</span> </span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">Cons</span> a b <span class="ot">-&gt;</span> someting<span class="op">...</span></span>
 <span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  _ <span class="ot">-&gt;</span> <span class="fu">error</span> <span class="st">&quot;Missing pattern at line n&quot;</span></span></code></pre></div>
-<p>So, Haskell would warn about this at compilation and then would proceed to add and error for all the missed cases. This way, function would be called as a regular one and would exploit on our faces if we pass some <strong>Empty</strong> list. Then the most accurate way to represent it in python is by the exception.</p>
-<p>This is one of the strong points of Haskell and others languages with strong, static type check and sum types. They could warn us about this missing cases but still would processed if we want.</p>
+<p>So, Haskell would warn about this at compilation and then would
+proceed to add and error for all the missed cases. This way,
+function would be called as a regular one and would exploit on our
+faces if we pass some <strong>Empty</strong> list. Then the most accurate way
+to represent it in python is by the exception.</p>
+<p>This is one of the strong points of Haskell and others languages
+with strong, static type check and sum types. They could
+warn us about this missing cases but still would processed if we want.</p>
 <p>So, how does a list looks in this representation?</p>
 <p>In Haskell :</p>
 <div class="sourceCode" id="cb23"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a></span>
@@ -242,27 +336,48 @@
 <p>is just a short way to write</p>
 <div class="sourceCode" id="cb24"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>a <span class="ot">=</span> <span class="dt">Cons</span> (<span class="dt">Cons</span> <span class="dv">1</span> (<span class="dt">Cons</span> <span class="dv">2</span> (<span class="dt">Cons</span> <span class="dv">3</span> <span class="dt">Empty</span>)) )</span></code></pre></div>
-<p>Here we see the Haskell syntax for function call, instead of <strong>f(x,y,z,w)</strong> we write <strong>f x y z w</strong>, and Haskell compiler introduce parentheses to make it <strong>(((f x) y)z) w</strong></p>
-<p>So, Haskell has in essence only functions that take one value as argument, in this case <strong>f x</strong> returns a function again an is that function the one in witch <strong>y</strong> is passed as argument.</p>
-<p>We wont go deeper about this here, but you can check this by searching for <a href="https://en.wikipedia.org/wiki/Currying">currying</a>.</p>
+<p>Here we see the Haskell syntax for function call, instead of
+<strong>f(x,y,z,w)</strong> we write <strong>f x y z w</strong>, and Haskell compiler introduce
+parentheses to make it <strong>(((f x) y)z) w</strong></p>
+<p>So, Haskell has in essence only functions that take one value
+as argument, in this case <strong>f x</strong> returns a function again
+an is that function the one in witch <strong>y</strong> is passed as argument.</p>
+<p>We wont go deeper about this here, but you can check this
+by searching for <a href="https://en.wikipedia.org/wiki/Currying">currying</a>.</p>
 <p>A last thing about this pattern is the way <strong>Empty</strong> is used here.</p>
 <p>In the underlying theory, <strong>Empty</strong> is a function of type :</p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="dt">Empty</span><span class="ot"> t ::</span> unit <span class="ot">-&gt;</span> <span class="dt">List</span> t</span></code></pre></div>
-<p>Here the <strong>unit</strong> type is something that has exactly one element. A real equivalent definition for our <strong>Empty</strong> class would consist of make a singleton class called <strong>Unit</strong> and use it to make our <strong>Empty</strong></p>
+<p>Here the <strong>unit</strong> type is something that has exactly one element.
+A real equivalent definition for our <strong>Empty</strong> class would consist
+of make a singleton class called <strong>Unit</strong> and use it to make
+our <strong>Empty</strong></p>
 <div class="sourceCode" id="cb26"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Empty(List, Generic[T]):</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, unit:Unit)<span class="op">-&gt;</span>List[T]:</span>
 <span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span></span></code></pre></div>
-<p>But regularly we don’t need to worry about this and Haskell allow us to omit he <strong>Unit</strong> argument of <strong>Empty</strong> as it could only be <strong>unit</strong>. So, I choose to drop that part in the definition of <strong>Empty</strong>.</p>
+<p>But regularly we don’t need to worry about this and Haskell
+allow us to omit he <strong>Unit</strong> argument of <strong>Empty</strong> as it could only
+be <strong>unit</strong>. So, I choose to drop that part in the definition
+of <strong>Empty</strong>.</p>
 <p>All that together to get our python example of <strong>[1,2,3]</strong></p>
 <div class="sourceCode" id="cb27"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> Cons(<span class="dv">1</span>,Cons(<span class="dv">2</span>,Cons(<span class="dv">3</span>,Empty)))</span></code></pre></div>
-<p>Now, a thing we haven’t talk is why we use <strong>T</strong> in our python definition and <strong>t</strong> in Haskell definition. This constrain means that we could only construct list of one type. That forbids us to write list like <strong>[1,“asdf”,(1,2)]</strong>. We could recover a little by introducing new types that could store this mixed values, but we won’t do that in this entry.</p>
-<p>Last thing to compare before return to iteration, is that Haskell list has elements append at left, while python has them append at right. Is a minor difference here but in certain context of formal verification it could made a big difference.</p>
+<p>Now, a thing we haven’t talk is why we use <strong>T</strong> in our python
+definition and <strong>t</strong> in Haskell definition.
+This constrain means that we could only construct list of one type.
+That forbids us to write list like <strong>[1,“asdf”,(1,2)]</strong>.
+We could recover a little by introducing new types that could store
+this mixed values, but we won’t do that in this entry.</p>
+<p>Last thing to compare before return to iteration, is that
+Haskell list has elements append at left, while python has them append at right.
+Is a minor difference here but in certain context of formal verification
+it could made a big difference.</p>
 <h1 id="iterating-over-list">Iterating over List</h1>
-<p>Now that we have <strong>List</strong> we could refactor our approach to write a new <strong>range</strong> function.</p>
-<p>To this, we would visit a old version of python, python 2. In python 2 the range function generates a full list of things, like</p>
+<p>Now that we have <strong>List</strong> we could refactor our approach to write a new
+<strong>range</strong> function.</p>
+<p>To this, we would visit a old version of python, python 2.
+In python 2 the range function generates a full list of things, like</p>
 <div class="sourceCode" id="cb28"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> old_range(start:<span class="bu">int</span>,end:<span class="bu">int</span>,step:<span class="bu">int</span>)<span class="op">-&gt;</span>List[<span class="bu">int</span>]:</span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  acc <span class="op">=</span> []</span>
@@ -272,7 +387,8 @@
 <span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>    count <span class="op">=</span> count <span class="op">+</span> step</span>
 <span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> acc</span></code></pre></div>
-<p>Of course, again, this isn’t a full implementation of <strong>old_range</strong> but it’s all we need.</p>
+<p>Of course, again, this isn’t a full implementation of <strong>old_range</strong> but it’s all
+we need.</p>
 <p>Then our aim is to do the same here to gain our range function:</p>
 <div class="sourceCode" id="cb29"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> range2_loop(</span>
@@ -296,7 +412,8 @@
 <span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a>   </span>
 <span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a>  start_list <span class="op">=</span> Empty</span>
 <span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> range2_loop(start,step,end, start_list)</span></code></pre></div>
-<p>Again, this is incomplete as it won’t handle negative numbers or other cases, but is enough for the main point.</p>
+<p>Again, this is incomplete as it won’t handle negative numbers or other cases, but
+is enough for the main point.</p>
 <p>With list as base we could write our <strong>fold</strong> function for lists as :</p>
 <div class="sourceCode" id="cb30"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> foldList(</span>
@@ -309,20 +426,42 @@
 <span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span> </span>
 <span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>    new_value <span class="op">=</span> transform_add_function(start_elem, <span class="bu">list</span>.head)</span>
 <span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> foldList(new_value, transform_add_function, <span class="bu">list</span>.tail)</span></code></pre></div>
-<p>We omit the check of <strong>list</strong> being a <strong>List</strong> and the check that all values are instance of <strong>Empty</strong> or <strong>Cons</strong>. We would continue to do this all the time but be warred that those steps could be needed to avoid mistakes.</p>
-<p>With both of our functions implemented, we could write or program to sum the first <strong>100</strong> integers as :</p>
+<p>We omit the check of <strong>list</strong> being a <strong>List</strong> and the check that all values
+are instance of <strong>Empty</strong> or <strong>Cons</strong>. We would continue to do this
+all the time but be warred that those steps could be needed
+to avoid mistakes.</p>
+<p>With both of our functions implemented, we could write or program to
+sum the first <strong>100</strong> integers as :</p>
 <div class="sourceCode" id="cb31"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>foldList(<span class="dv">0</span>,add_two,new_range2(<span class="dv">0</span>,<span class="dv">1001</span>,<span class="dv">1</span>))</span></code></pre></div>
-<p>With this we take our original approach and refactor it to get a much clean code (or at least more understandable code to me).</p>
-<p>A big advantage of this encoding is that <strong>foldList</strong> is enough general to handle all the list we could made instead of just the one generated by <strong>new_range2</strong>.</p>
+<p>With this we take our original approach and refactor it to get a much clean
+code (or at least more understandable code to me).</p>
+<p>A big advantage of this encoding is that <strong>foldList</strong> is enough general
+to handle all the list we could made instead of just the one generated by
+<strong>new_range2</strong>.</p>
 <p>And we got all of that without explicitly mutating things!</p>
 <h1 id="hidden-mutation">Hidden mutation</h1>
 <p>Of course we have perform some mutations under the hood.</p>
-<p>We can’t store space in memory without changing the memory, so all instance creation would mutate the memory. But the key here is : <strong>We don’t explicitly mutate anything</strong>. So if there’s a fail given to mutation, is a fail made by python runtime himself and not by the logic of our program. This means that we could be sure that as long as python runtime is right implemented, our program would perform as expected. In Haskell we have exactly this warranty, there are mutations happening under the hood but we don’t need to know them, we just need to trust Haskell runtime (and code generation) . This also means that those parts must have an intensive revision to avoid bugs.</p>
-<p>In exchange we could code without being worried that some thing are being mutated by accident. Of course we could still mess around our logic and do something like <strong>mutate things</strong> without intend it, but we would come back to that latter.</p>
+<p>We can’t store space in memory without changing the memory, so
+all instance creation would mutate the memory. But the key here is :
+<strong>We don’t explicitly mutate anything</strong>. So if there’s a fail
+given to mutation, is a fail made by python runtime himself and not
+by the logic of our program. This means that we could be sure that
+as long as python runtime is right implemented, our program would
+perform as expected. In Haskell we have exactly this warranty,
+there are mutations happening under the hood but we don’t need to
+know them, we just need to trust Haskell runtime (and code generation)
+. This also means that those parts must have an intensive revision
+to avoid bugs.</p>
+<p>In exchange we could code without being worried that
+some thing are being mutated by accident. Of course we could
+still mess around our logic and do something like <strong>mutate things</strong>
+without intend it, but we would come back to that latter.</p>
 <p>Let’s complete our <strong>List</strong> functions by implement some other functions.</p>
 <h1 id="complete-list-module">Complete List module</h1>
-<p>What if instead of fully consume a list we want to transform a list of one type to another?, by example, if we have a list of chars and want it to become a list of ints, what should we do?</p>
+<p>What if instead of fully consume a list we want to transform a list of one
+type to another?, by example, if we have a list of chars and want it
+to become a list of ints, what should we do?</p>
 <p>There’s where <strong>map</strong> function comes to help us</p>
 <div class="sourceCode" id="cb32"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> mapList(transform:Callable[[a,b], b], <span class="bu">list</span>:List[a])<span class="op">-&gt;</span>List[b]:</span>
@@ -336,7 +475,11 @@
 <div class="sourceCode" id="cb33"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> charList2intList(<span class="bu">list</span>:List[<span class="bu">str</span>])<span class="op">-&gt;</span>List[<span class="bu">str</span>]:</span>
 <span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> mapList(<span class="bu">ord</span>,<span class="bu">list</span>)</span></code></pre></div>
-<p>Of course again our types are bad as we use <strong>str</strong> while we wanted to use <strong>char</strong>, but as python doesn’t have <strong>char</strong> type, most simple hack is to use <strong>str</strong>. Then whenever we use a <strong>list</strong> with more than one char per item, we would get a exception. We could prevent this by defining a type <strong>Char</strong> that is warrantied to store just a <strong>char</strong></p>
+<p>Of course again our types are bad as we use <strong>str</strong> while we wanted to use <strong>char</strong>,
+but as python doesn’t have <strong>char</strong> type, most simple hack is to use <strong>str</strong>. Then
+whenever we use a <strong>list</strong> with more than one char per item, we would get a
+exception. We could prevent this by defining a type <strong>Char</strong> that is
+warrantied to store just a <strong>char</strong></p>
 <div class="sourceCode" id="cb34"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Char:</span>
@@ -345,7 +488,9 @@
 <span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>      <span class="va">self</span>.char <span class="op">=</span> c</span>
 <span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> :</span>
 <span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>      <span class="cf">raise</span> NonChar(<span class="st">&quot;We tried to make a char instance with more or less than one char&quot;</span>)</span></code></pre></div>
-<p>This approach still raises an exception, but this exception would be raised when we try to instance <strong>Char</strong> and this could happen in a different point of program. But generally the exception of <strong>Char</strong> would be in a place closer to some bug.</p>
+<p>This approach still raises an exception, but this exception would be raised
+when we try to instance <strong>Char</strong> and this could happen in a different point of program.
+But generally the exception of <strong>Char</strong> would be in a place closer to some bug.</p>
 <p>With this class done we need a new function that allow us to split <strong>str</strong> in <strong>List Char</strong></p>
 <div class="sourceCode" id="cb35"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> str2charList(s:<span class="bu">str</span>)<span class="op">-&gt;</span>List[<span class="bu">str</span>]:</span>
@@ -366,8 +511,14 @@
 <span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>  char_list <span class="op">=</span> str2charList(s)</span>
 <span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>  int_list <span class="op">=</span> charList2intList(char_list)</span>
 <span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> int_list</span></code></pre></div>
-<p>With all that done, we can now manipulate <strong>str</strong> as <strong>List Char</strong>, that means, we could implement the build-in functions of <strong>str</strong> in terms of <strong>List Char</strong>. This could be a waste as python already has immutable strings, but we have shown that we could.</p>
-<p>The remain traditional function to work with list is <strong>filter</strong>. That function, allow us to keep just the elements of list that match some condition.</p>
+<p>With all that done, we can now manipulate <strong>str</strong> as <strong>List Char</strong>,
+that means, we could implement the build-in functions of <strong>str</strong>
+in terms of <strong>List Char</strong>. This could be a waste as
+python already has immutable strings, but we have shown that
+we could.</p>
+<p>The remain traditional function to work with list is <strong>filter</strong>.
+That function, allow us to keep just the elements of list that
+match some condition.</p>
 <div class="sourceCode" id="cb38"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> filterList(predicate:Callable[[a],<span class="bu">bool</span>], <span class="bu">list</span>:List[a])<span class="op">-&gt;</span> List[a]:</span>
 <span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> <span class="bu">isinstance</span>(<span class="bu">list</span>, Empty):</span>
@@ -380,17 +531,42 @@
 <span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> tail_filter</span></code></pre></div>
 <h1 id="why-immutable">Why immutable?</h1>
 <p>A major reason to maintain immutability is to have <a href="https://en.wikipedia.org/wiki/Referential_transparency">referential transparency</a>.</p>
-<p>This means that if we know that function <strong>f</strong> would return some value <strong>k</strong> always, since we won’t allow mutations to happen inside <strong>f</strong>, we could replace all the calls to <strong>f</strong> by just <strong>k</strong> without fear about our program.</p>
-<p>Or if we are tracking what function has unexpectedly changed a global value, we could skip all immutable parts as those are guaranteed to not change the value.</p>
-<p>In python the former is a weak reason as interpreter generally can’t make the substitution (and probably won’t try to check if some code is immutable). But the later is a great reason to have immutable things.</p>
-<p>By comparison in Haskell this kind of things allow the compiler to make strong transformations to our code and still do the same thing at end. Those part has it’s roots in <strong>equational reasoning</strong> and is out of scope right now.</p>
-<p>Haskell isn’t the only language with those benefits from <strong>referential transparency</strong>, the benefits goes even beyond FP languages and extends to imperative ones like C. If compiler is able to check that some function <strong>f</strong> works with our immutable rules, then it could just as in Haskell make strong changes in code. So, imperative compilers tend to have a part dedicated to identify those class of functions.</p>
-<p>To end the section, a function that follow the immutability rules are generally called <a href="https://en.wikipedia.org/wiki/Pure_function"><strong>pure functions</strong></a></p>
+<p>This means that if we know that function <strong>f</strong> would return some value <strong>k</strong> always, since
+we won’t allow mutations to happen inside <strong>f</strong>, we could
+replace all the calls to <strong>f</strong> by just <strong>k</strong> without fear about our program.</p>
+<p>Or if we are tracking what function has unexpectedly changed a global value,
+we could skip all immutable parts as those are guaranteed to not change the value.</p>
+<p>In python the former is a weak reason as interpreter generally can’t make the
+substitution (and probably won’t try to check if some code is immutable). But
+the later is a great reason to have immutable things.</p>
+<p>By comparison in Haskell this kind of things allow the compiler to
+make strong transformations to our code and still do the same thing at end.
+Those part has it’s roots in <strong>equational reasoning</strong> and is out of scope right now.</p>
+<p>Haskell isn’t the only language with those benefits from <strong>referential transparency</strong>,
+the benefits goes even beyond FP languages and extends to imperative ones like C.
+If compiler is able to check that some function <strong>f</strong> works with our immutable
+rules, then it could just as in Haskell make strong changes in code.
+So, imperative compilers tend to have a part dedicated to identify those class of
+functions.</p>
+<p>To end the section, a function that follow the immutability rules are generally called
+<a href="https://en.wikipedia.org/wiki/Pure_function"><strong>pure functions</strong></a></p>
 <h1 id="unexpected-thing-of-recursivity">Unexpected thing of recursivity</h1>
-<p>In python we know that recursivity as those we use in our functions, is a bad idea as python isn’t able to handle it with grace. What is unexpected is that Haskell won’t handle it much better in some sense.</p>
-<p>People that already work in other languages that encourages recursivity, tend to rely on <a href="https://en.wikipedia.org/wiki/Tail_call">tail calls</a> to optimize code and guarantee bounded stack. Haskell won’t perform tail call optimizations as expected. At least, given the <strong>lazy</strong> nature of Haskell, we can’t expect naive tail calls to work as in other languages. More on this in other entries.</p>
-<p>Lesson here is that our python code has <strong>tail calls</strong> not because we expect python nor Haskell to optimize them, just for a matter of taste with other languages and ease of write (and understand). So don’t go to Haskell thinking <strong>I’m gonna conquer the language using tail calls</strong></p>
-<p>That’s all for this entry. I hope that you have a better understanding of how things work under the hood in Haskell or at least a little about why it looks as weird as it does compared to imperative languages with unrestricted mutation.</p>
+<p>In python we know that recursivity as those we use in our functions, is a bad idea
+as python isn’t able to handle it with grace. What is unexpected is that
+Haskell won’t handle it much better in some sense.</p>
+<p>People that already work in other languages that encourages recursivity, tend to
+rely on <a href="https://en.wikipedia.org/wiki/Tail_call">tail calls</a> to optimize code
+and guarantee bounded stack. Haskell won’t perform tail call optimizations as expected.
+At least, given the <strong>lazy</strong> nature of Haskell, we can’t expect naive tail calls to
+work as in other languages. More on this in other entries.</p>
+<p>Lesson here is that our python code has <strong>tail calls</strong> not because we
+expect python nor Haskell to optimize them, just for a matter of taste with other
+languages and ease of write (and understand). So don’t go to Haskell thinking
+<strong>I’m gonna conquer the language using tail calls</strong></p>
+<p>That’s all for this entry. I hope that you have a better understanding of
+how things work under the hood in Haskell or at least a little about why it
+looks as weird as it does compared to imperative languages with
+unrestricted mutation.</p>
 
         </div>
         <div id="footer">
