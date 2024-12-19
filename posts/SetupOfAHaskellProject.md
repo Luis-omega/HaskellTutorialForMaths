@@ -412,3 +412,46 @@ From here you can:
 - Use this as a template for new projects (well you can also have project
   templates that cabal can use to fill things in the `init` face, but I didn't
   mean this!).
+
+The blog real structure of the project
+---
+
+Although this blog has a Cabal file it doesn't follow completely the
+structure described here. Not only that but we also have
+a **nix-flake** file that we use to manage the project together with **cabal**.
+The use of nix mitigated some of the problems that Haskell had for
+a long time with dependencies (up to some degree). But some times
+you still have those problems.
+
+I plan to write another entry where I talk about the particular
+configuration of the blog, but for now this is what you may want to
+know about the current [cabal file](https://github.com/Luis-omega/Learning-Haskell/blob/f3e7eb8c8d671228b4636d921c63e88e6e9a8d66/Blog.cabal).
+
+- I have **library** section pointing to a **posts** folder.
+  Here I write things in either markdown or literate Haskell.
+  I put the files under a library for the **hslp** to accept them as
+  part of the project!
+- I have a **site** executable that generated all the html
+  code that you can see at [my blog](https://luis-omega.github.io/Learning-Haskell/).
+  I'm using the Hakyll library to create this.
+  This also means that I can create a pdf version of
+  every entry with ease, but I don't want to share them for now,
+  if you are interested you are free to do it yourself!.
+  I try hard to use only features that can be properly handled by
+  html and latex in the blog.
+- I have a dedicated **aoc** executable.
+  Instead of putting all the code in a library and use it in the
+  executable I put them in the **other-modules** as directly part of the
+  **aoc** executable.
+  I have to do this since the regular blog entries already are a
+  library and from what I know cabal can't handle having more than
+  one library.
+  There are other solutions like opening another repo or using
+  another project, but I wanted AOC to be part of the blog project,
+  so I choose this for now.
+  I also needed **hslp** linting in those files and this is a
+  way to have it.
+
+I'm just at the beginning of writing the AOC2024 entries, but I think I
+would need to add a tests section for the problems (as sometimes I
+need to test some functions). But I'm still not convinced of the benefit of it.
